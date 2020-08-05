@@ -14,7 +14,7 @@ using namespace std;
 
 // Parameters
 const int no_close_next_rides = 10;
-string instance_name = "a_example.in";
+string instance_name = "dataset/a_example.in";
 string solution_name = "a_example.out";
 
 struct ride {
