@@ -32,7 +32,7 @@ struct data_set {
 	data_set() {
 		rides = new ride[N];
 
-		// Read the date from the file with name from variable instance_name
+		// Read the data from the file with name from variable instance_name
 		// Place the date from the file in the respective variables and arrays
 		// Find the next close rides for each ride
 		// Test the functionality of the code in the main function
