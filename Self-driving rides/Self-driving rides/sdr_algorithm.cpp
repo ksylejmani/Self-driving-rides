@@ -30,7 +30,7 @@ struct ride {
 
 struct data_set {
 	int R, C, F, N, B, T;
-	vector<ride*> rides;
+	vector<ride> rides;
 	string instance;
 	data_set() {
 		instance = instance_name;
@@ -80,7 +80,7 @@ struct data_set {
 		int _s = values[4];
 		int _f = values[5];
 		//get a new "ride" initiated with values read on currennt line
-		ride *new_ride = new ride(_a, _b, _x, _y, _s, _f);
+		ride new_ride(_a, _b, _x, _y, _s, _f);
 		rides.push_back(new_ride);
 	}
 
@@ -123,10 +123,10 @@ struct submission
 int main() {
 	//Test run
 	data_set d1;
-	for(ride * x : d1.rides){
+	for(ride x : d1.rides){
 		//ride from [0, 0] to [1, 3], earliest start 2, latest finish 9
-		cout << "Ride from [" << x->a << ", " << x->b << "] to [" << x->x << ", " << x->y
-			<< "], earliest start " << x->s << ", latest finish " << x->f << endl;
+		cout << "Ride from [" << x.a << ", " << x.b << "] to [" << x.x << ", " << x.y
+			<< "], earliest start " << x.s << ", latest finish " << x.f << endl;
 	}
 
 	
