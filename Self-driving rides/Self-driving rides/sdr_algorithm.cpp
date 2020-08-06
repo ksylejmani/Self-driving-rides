@@ -14,10 +14,12 @@
 #include <chrono>
 using namespace std;
 
-// Parameters
+
 const int no_close_next_rides = 1;
-string instance_name = "dataset/c_no_hurry.in";
-string solution_name = "a_example.out";
+const int difference_earliest_start_time = 5;
+const int difference_latest_finish_time = 5;
+string instance_name = "dataset/b_should_be_easy.in";
+string solution_name = "b_should_be_easy.out";
 
 struct ride {
 	int a, b, x, y, s, f;
