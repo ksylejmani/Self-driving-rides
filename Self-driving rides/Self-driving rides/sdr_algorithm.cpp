@@ -14,8 +14,10 @@
 using namespace std;
 
 // Parameters
-const int no_close_next_rides = 10;
-string instance_name = "dataset/a_example.in";
+const int no_close_next_rides = 5;
+const int difference_earliest_start_time = 5;
+const int difference_latest_finish_time = 5;
+string instance_name = "dataset/b_should_be_easy.in";
 string solution_name = "a_example.out";
 
 struct ride {
