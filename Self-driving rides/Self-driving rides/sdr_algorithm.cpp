@@ -11,14 +11,15 @@
 #include <sstream>
 #include <fstream>
 #include <queue>
+#include <chrono>
 using namespace std;
 
-// Parameters
-const int no_close_next_rides = 5;
+
+const int no_close_next_rides = 1;
 const int difference_earliest_start_time = 5;
 const int difference_latest_finish_time = 5;
 string instance_name = "dataset/b_should_be_easy.in";
-string solution_name = "a_example.out";
+string solution_name = "b_should_be_easy.out";
 
 struct ride {
 	int a, b, x, y, s, f;
@@ -111,37 +112,35 @@ struct data_set {
 	}
 
 	//Could be private
-	ride* find_close_ride(ride* given_ride, vector<ride*>* checked_rides) {
+	ride* find_close_ride(ride* given_ride) {
 		ride* closest_ride = new ride();
 
 		//Longest distance possible is number of rows + number of columns (so we can have a starting value)
 		int closest_distance = R + C;
-
 		for (ride* check_ride : rides) {
-			//Skip if the ride is identical with the given ride OR already added to the closest rides vector
-			if (check_ride == given_ride || std::find(checked_rides->begin(), checked_rides->end(), check_ride) != checked_rides->end())
+			//Skip if the ride is identical with the given ride
+			if (check_ride == given_ride)
 				continue;
 
 			//Find the closest ride based on the distance between points
 			int check_distance = abs(given_ride->a - check_ride->x) + abs(given_ride->b - check_ride->y);
+
 			if (closest_distance >= check_distance) {
-				closest_ride = check_ride;
-				closest_distance = check_distance;
+				if (find(given_ride->close_next_rides.begin(), given_ride->close_next_rides.end(), check_ride) == given_ride->close_next_rides.end()) {
+					closest_ride = check_ride;
+					closest_distance = check_distance;
+				}
 			}
 		}
-		//Add ride to vector so we can bypass it on the next iteration
-		checked_rides->insert(checked_rides->begin(), closest_ride);
 
 		return closest_ride;
 	}
 
 
 	void find_k_closest_rides(ride* given_ride, int K) {
-		vector<ride*> closest_rides;
-
 		//min(K, N - 1) in case K is bigger than the number of rides
 		for (int i = 0; i < min(K, N - 1); i++)
-			given_ride->close_next_rides.push_back(find_close_ride(given_ride, &closest_rides));
+			given_ride->close_next_rides.push_back(find_close_ride(given_ride));
 
 	}
 };
