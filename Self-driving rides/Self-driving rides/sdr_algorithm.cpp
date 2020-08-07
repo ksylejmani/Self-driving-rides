@@ -14,12 +14,13 @@
 #include <chrono>
 using namespace std;
 
-
-const int no_close_next_rides = 1;
+//Parameters
+const int no_close_next_rides = 3;
 const int difference_earliest_start_time = 5;
 const int difference_latest_finish_time = 5;
-string instance_name = "dataset/b_should_be_easy.in";
-string solution_name = "b_should_be_easy.out";
+string instance_name = "b_should_be_easy";
+string instance_path = "dataset/"+instance_name+".in";
+string solution_name = instance_name+".out";
 
 struct ride {
 	int a, b, x, y, s, f;
@@ -41,10 +42,10 @@ struct data_set {
 	string instance;
 	data_set() {
 		// Read the data from the file with name from variable instance_name  
-		instance = instance_name;
+		instance = instance_path;
 
 		// Place the data from the file in the respective variables and arrays  
-		read_instance_file(instance_name);
+		read_instance_file(instance_path);
 
 		// Find the next close rides for each ride
 		for (ride* d_ride : rides)
