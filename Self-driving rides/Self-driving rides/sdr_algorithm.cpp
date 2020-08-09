@@ -45,7 +45,7 @@ struct data_set {
 		instance = instance_path;
 
 		// Place the data from the file in the respective variables and arrays  
-		read_instance_file(instance_path);
+		read_instance_file(instance);
 
 		// Find the next close rides for each ride
 		for (ride* d_ride : rides)
