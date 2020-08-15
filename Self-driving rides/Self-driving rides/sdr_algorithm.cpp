@@ -12,6 +12,8 @@
 #include <fstream>
 #include <queue>
 #include <chrono>
+#include <ctime>
+#include <iomanip>
 using namespace std;
 
 //Parameters
@@ -19,8 +21,8 @@ const int no_close_next_rides = 3;
 const int difference_earliest_start_time = 5;
 const int difference_latest_finish_time = 5;
 string instance_name = "b_should_be_easy";
-string instance_path = "dataset/"+instance_name+".in";
-string solution_name = instance_name+".out";
+string instance_path = "dataset/" + instance_name + ".in";
+string solution_name = instance_name + ".out";
 
 struct ride {
 	int a, b, x, y, s, f;
@@ -73,7 +75,7 @@ struct data_set {
 
 	void process_first_line(string first_line) {
 		vector<int> values = split_string_to_ints(first_line);
-		//initiate data_set 
+		//initiate data_set  
 		R = values[0];
 		C = values[1];
 		F = values[2];
@@ -149,7 +151,16 @@ struct data_set {
 struct submission
 {
 	map<int, vector<int>> fleets;
+
+	vector<int> fleet1;
+	vector<int> fleet2;
+	vector<int> fleet3;
+	vector<int> fleet4;
+	vector<int> fleet5;
+
 	submission() {
+		srand(time(NULL));                                         //seeding random numbers
+
 		data_set ds;
 		ds.R = 20;
 		ds.C = 17;
@@ -157,11 +168,138 @@ struct submission
 		ds.N = 15;
 		ds.B = 3;
 		ds.T = 36;
+
+		int random_numbers[4];
+		int sum = 0;
+
+		for (int i = 0; i < 4; i++)
+		{
+		label:
+			random_numbers[i] = rand() % 4;                       //   4 vehicles e para ka sa rruge(i caktuam random) kan mi pershkru , prej tynev ma s'shumti njo munet mi pershkru 3 rruge
+			if (random_numbers[i] == 0)
+				goto label;
+			sum = sum + random_numbers[i];
+		}
+
+		int assigned_rides[15];                                  // Vargu qe ruan se cilat rruge jane te pershkruare (ne menyre qe mos ti pershkruajme per te n ten here)
+
+		for (int i = 0; i < 15; i++)
+			assigned_rides[i] = -1;								//Fillimisht e inicializojme me -1 - sha
+
+		fleet1.push_back(random_numbers[0]);
+
+		for (int i = 0; i < random_numbers[0]; i++)
+		{
+		label_1:
+			int x = rand() % 15;
+
+			assigned_rides[i] = x;
+			//vehicle 1 - shit ja caktum random rides
+			if (i == 0)
+				goto fleet;
+			else
+			{
+				for (int j = 0; j < i; j++)
+				{
+					if (assigned_rides[j] == x)
+					{
+						goto label_1;
+					}
+				}
+			}
+		fleet:
+			fleet1.push_back(x);
+		}
+
+		fleet2.push_back(random_numbers[1]);
+
+		for (int i = random_numbers[0]; i < random_numbers[0] + random_numbers[1]; i++)
+		{
+		label_2:
+			int x = rand() % 15;
+			for (int j = 0; j < i; j++)
+			{
+				if (x == assigned_rides[j])
+					goto label_2;
+			}
+			assigned_rides[i] = x;
+			//vehicle 2 - shit ja caktum random rides
+			fleet2.push_back(x);
+		}
+
+		fleet3.push_back(random_numbers[2]);
+
+		for (int i = random_numbers[0] + random_numbers[1]; i < random_numbers[0] + random_numbers[1] + random_numbers[2]; i++)
+		{
+		label_3:
+			int x = rand() % 15;
+			for (int j = 0; j < i; j++)
+			{
+				if (x == assigned_rides[j])									//vehicle 3 - shit ja caktum random rides
+					goto label_3;
+			}
+			assigned_rides[i] = x;
+			fleet3.push_back(x);
+		}
+
+		fleet4.push_back(random_numbers[3]);
+
+		for (int i = random_numbers[0] + random_numbers[1] + random_numbers[2]; i < sum; i++) {
+		label_4:
+			int x = rand() % 15;
+
+			for (int j = 0; j < i; j++)
+			{
+				if (x == assigned_rides[j])									//vehicle 4 - shit ja caktum random rides
+					goto label_4;
+			}
+			assigned_rides[i] = x;
+			fleet4.push_back(x);
+		}
+
+		fleet5.push_back(15 - sum);
+
+		for (int i = sum; i < 15; i++)
+		{
+		label_5:
+			int x = rand() % 15;
+			for (int j = 0; j < i; j++)
+			{
+				if (x == assigned_rides[j])									//vehicle 5 - shit ja caktum random rides
+					goto label_5;
+			}
+
+			assigned_rides[i] = x;
+
+			fleet5.push_back(x);
+		}
+
+		fleets.insert(pair<int, vector<int>>(1, fleet1));
+		fleets.insert(pair<int, vector<int>>(2, fleet2));
+		fleets.insert(pair<int, vector<int>>(3, fleet3));
+		fleets.insert(pair<int, vector<int>>(4, fleet4));
+		fleets.insert(pair<int, vector<int>>(5, fleet5));
+
 		//Assign rides manually
 		// Make a test with F=5 fleets and N=15 rides
 		// Make a hard coded (or even better a random) solution by making sure that all constraints are satisfied
 		// Save the solution of fleets to the file with the name of the variable solution_name
 		// Test the functionality of the code in the main function
+	}
+	void show_assigned_roads() {
+		ofstream csv_file(solution_name);
+		for (map<int, vector<int>>::iterator itr = fleets.begin(); itr != fleets.end(); itr++)
+		{
+			for (int j = 0; j < itr->second.size(); j++)
+			{
+				if (j == 0)
+					csv_file << itr->second.at(j);
+				else
+					csv_file << "  " << setw(2) << itr->second.at(j);
+				/*csv_file<< "\t" << itr->second.at(j);*/
+			}
+			csv_file << endl;
+		}
 	}
 };
 
@@ -180,7 +318,8 @@ int main() {
 		}
 		cout << endl;
 	}
-
+	//Test of submission structure
+	submission s;
+	s.show_assigned_roads();
 	return 0;
 }
-
