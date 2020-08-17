@@ -1,2 +1,4 @@
 ﻿  sdr_algorithm.cpp
+D:\Konferencat dhe Revistat\2020\Self-driving rides\Self-driving rides\Self-driving rides\sdr_algorithm.cpp(155,13): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+D:\Konferencat dhe Revistat\2020\Self-driving rides\Self-driving rides\Self-driving rides\sdr_algorithm.cpp(286,22): warning C4018: '<': signed/unsigned mismatch
   Self-driving rides.vcxproj -> D:\Konferencat dhe Revistat\2020\Self-driving rides\Self-driving rides\Debug\Self-driving rides.exe

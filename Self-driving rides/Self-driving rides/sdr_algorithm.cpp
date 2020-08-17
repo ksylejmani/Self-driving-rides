@@ -18,6 +18,7 @@ using namespace std;
 
 //Parameters
 const int no_close_next_rides = 3;
+const int no_replace_next_rides = 3;
 const int difference_earliest_start_time = 5;
 const int difference_latest_finish_time = 5;
 string instance_name = "b_should_be_easy";
@@ -30,6 +31,7 @@ struct ride {
 
 	//pair <int, int> close_next_rides[no_close_next_rides];
 	vector<ride*> close_next_rides;
+	vector<ride*> close_replace_rides;
 
 	ride() {	}
 	ride(int _a, int _b, int _x, int _y, int _s, int _f) {
