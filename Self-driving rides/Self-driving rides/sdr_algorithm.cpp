@@ -31,8 +31,7 @@ struct ride {
 	//pair <int, int> close_next_rides[no_close_next_rides];
 	vector<ride*> close_next_rides;
 
-	ride() {
-	}
+	ride() {	}
 	ride(int _a, int _b, int _x, int _y, int _s, int _f) {
 		a = _a; b = _b; x = _x; y = _y; s = _s; f = _f;
 	}
@@ -60,8 +59,8 @@ struct data_set {
 		stringstream ss_line(line);
 		vector<int> values;
 		// Read all words (numbers)
+		string word;
 		do {
-			string word;
 			ss_line >> word;
 			//Check if still in the middle of the line
 			if (word != "") {
@@ -86,14 +85,8 @@ struct data_set {
 
 	void process_ride_lines(string ride_line) {
 		vector<int> values = split_string_to_ints(ride_line);
-		int _a = values[0];
-		int _b = values[1];
-		int _x = values[2];
-		int _y = values[3];
-		int _s = values[4];
-		int _f = values[5];
-		//get a new "ride" initiated with values read on currennt line
-		ride* new_ride = new ride(_a, _b, _x, _y, _s, _f);
+		//get a new "ride" initiated with values read on currennt line and initiate variables appropriately
+		ride* new_ride = new ride(values[0], values[1], values[2], values[3], values[4], values[5]);
 		rides.push_back(new_ride);
 	}
 
