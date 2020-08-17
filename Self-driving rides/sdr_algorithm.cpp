@@ -1,7 +1,3 @@
-//Materials
-// https://www.gormanalysis.com/blog/reading-and-writing-csv-files-with-cpp/
-// https://www.geeksforgeeks.org/vector-in-cpp-stl/
-// https://www.geeksforgeeks.org/pair-in-cpp-stl/
 #include <algorithm> 
 #include <iostream>
 #include <vector>
@@ -17,13 +13,15 @@
 using namespace std;
 
 //Parameters
+const int no_iterations = 100;
 const int no_close_next_rides = 3;
 const int no_replace_next_rides = 3;
 const int difference_earliest_start_time = 5;
 const int difference_latest_finish_time = 5;
 string instance_name = "b_should_be_easy";
 string instance_path = "dataset/" + instance_name + ".in";
-string solution_name = instance_name + ".out";
+string solution_path = "solution/" + instance_name + ".out";
+
 
 struct ride {
 	int a, b, x, y, s, f;
@@ -278,11 +276,11 @@ struct submission
 		//Assign rides manually
 		// Make a test with F=5 fleets and N=15 rides
 		// Make a hard coded (or even better a random) solution by making sure that all constraints are satisfied
-		// Save the solution of fleets to the file with the name of the variable solution_name
+		// Save the solution of fleets to the file with the name of the variable solution_path
 		// Test the functionality of the code in the main function
 	}
 	void show_assigned_roads() {
-		ofstream csv_file(solution_name);
+		ofstream csv_file(solution_path);
 		for (map<int, vector<int>>::iterator itr = fleets.begin(); itr != fleets.end(); itr++)
 		{
 			for (int j = 0; j < itr->second.size(); j++)
@@ -297,6 +295,42 @@ struct submission
 		}
 	}
 };
+
+int get_score(data_set ds,map<int, vector<int>> fleets) {// To be done by Erlis
+	int result = 0;
+	//Implementation goes here ...
+	return result;
+}
+map<int, vector<int>> get_initial_solution_variant_1(data_set ds) {
+	// Variant 1 - Fully random, to be done by Enes
+	map<int, vector<int>> result;
+	//Implementation goes here ...
+	return result;
+}
+
+map<int, vector<int>> get_initial_solution_variant_2(data_set ds) {
+	// Variant 2 - Smart random, to be done by Lendrit
+	map<int, vector<int>> result;
+	//Implementation goes here ...
+	return result;
+}
+
+map<int, vector<int>> get_greedy_local_search_solution(data_set ds) {
+	map<int, vector<int>> d;
+	// d= get_initial_solution();// Variant 1 - Fully random, to be done by Enes
+								 // Variant 2 - Smart random, to be done by Lendrit
+	// d_quality= get_socore(ds,e);
+	int i = 1;
+	//while (i <= no_iterations) {
+		// N= get_neighborhood();
+		// e= choose_neighbour(N);
+		// e_quality=get_socore(ds,e);
+		// if(e_quality>d_quality)
+				//d = e;
+		//i++;
+	//}
+	return d;
+}
 
 int main() {
 	//Test run
