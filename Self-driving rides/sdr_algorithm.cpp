@@ -18,7 +18,7 @@ const int no_close_next_rides = 3;
 const int no_replace_next_rides = 3;
 const int difference_earliest_start_time = 5;
 const int difference_latest_finish_time = 5;
-string instance_name = "b_should_be_easy";
+string instance_name = "a_example";
 string instance_path = "dataset/" + instance_name + ".in";
 string solution_path = "solution/" + instance_name + ".out";
 
@@ -299,12 +299,14 @@ struct submission
 int get_score(data_set ds,map<int, vector<int>> fleets) {// To be done by Erlis
 	int result = 0;
 	//Implementation goes here ...
+	// Test your function by using both solutions of Enes and Lendrit
 	return result;
 }
 map<int, vector<int>> get_initial_solution_variant_1(data_set ds) {
 	// Variant 1 - Fully random, to be done by Enes
 	map<int, vector<int>> result;
 	//Implementation goes here ...
+	//Test your solution in the main function
 	return result;
 }
 
@@ -312,6 +314,7 @@ map<int, vector<int>> get_initial_solution_variant_2(data_set ds) {
 	// Variant 2 - Smart random, to be done by Lendrit
 	map<int, vector<int>> result;
 	//Implementation goes here ...
+	//Test your solution in the main function
 	return result;
 }
 
