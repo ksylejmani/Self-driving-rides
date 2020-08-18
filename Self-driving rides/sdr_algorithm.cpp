@@ -53,23 +53,16 @@ struct data_set {
 			find_k_closest_rides(d_ride, no_close_next_rides);
 		// Test the functionality of the code in the main function
 	}
-
+	
 	vector<int> split_string_to_ints(string line) {
 		// Used to split string around spaces. 
 		stringstream ss_line(line);
 		vector<int> values;
-		// Read all words (numbers)
-		string word;
-		do {
-			ss_line >> word;
-			//Check if still in the middle of the line
-			if (word != "") {
-				int value = stoi(word); //Convert string to int
-				values.push_back(value);
-			}
-			//While there is more to read
-		} while (ss_line);
-		return values;  //return vector with string words(numbers) -> int values
+	    // read as many numbers as possible.
+	    for (int number; ss_line >> number;) {
+	        values.push_back(number);
+	    }
+		return values;
 	}
 
 	void process_first_line(string first_line) {
