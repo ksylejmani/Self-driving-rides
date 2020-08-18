@@ -274,11 +274,11 @@ struct submission
 			fleet5.push_back(x);
 		}
 
-		fleets.insert(pair<int, vector<int>>(1, fleet1));
-		fleets.insert(pair<int, vector<int>>(2, fleet2));
-		fleets.insert(pair<int, vector<int>>(3, fleet3));
-		fleets.insert(pair<int, vector<int>>(4, fleet4));
-		fleets.insert(pair<int, vector<int>>(5, fleet5));
+		fleets.insert(pair<int, vector<int>>(0, fleet1));
+		fleets.insert(pair<int, vector<int>>(1, fleet2));
+		fleets.insert(pair<int, vector<int>>(2, fleet3));
+		fleets.insert(pair<int, vector<int>>(3, fleet4));
+		fleets.insert(pair<int, vector<int>>(4, fleet5));
 
 		//Assign rides manually
 		// Make a test with F=5 fleets and N=15 rides
@@ -295,8 +295,7 @@ struct submission
 				if (j == 0)
 					csv_file << itr->second.at(j);
 				else
-					csv_file << "  " << setw(2) << itr->second.at(j);
-				/*csv_file<< "\t" << itr->second.at(j);*/
+					csv_file << " "  << itr->second.at(j);
 			}
 			csv_file << endl;
 		}
