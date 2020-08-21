@@ -265,6 +265,8 @@ struct submission
 		fleets.insert(pair<int, vector<int>>(2, fleet3));
 		fleets.insert(pair<int, vector<int>>(3, fleet4));
 		fleets.insert(pair<int, vector<int>>(4, fleet5));
+		
+		cout << "Score: " << get_score(ds, fleets) << endl; // Test the get_score function
 
 		//Assign rides manually
 		// Make a test with F=5 fleets and N=15 rides
@@ -288,12 +290,62 @@ struct submission
 	}
 };
 
-int get_score(data_set ds,map<int, vector<int>> fleets) {// To be done by Erlis
-	int result = 0;
-	//Implementation goes here ...
+int get_score(data_set ds, map<int, vector<int>> fleets) {// To be done by Erlis
+	//Implementation goes here ..
+
+	int result = 0; // Contains the score of all vehicles combined including bonuses
+	/*
+	We assume that each ride is assigned to a vehicle only once
+	and that M (the first value of each vector of the map) is always 
+	the number of rides assigned to the respective vehicle
+	*/
+	int bonus = ds.B;
+
+	for (auto it = fleets.begin(); it != fleets.end(); it++) // Iterate for each vehicle
+	{
+		int vehicle_score; // Contains the score of the current vehicle
+		pair<int, int> position(0, 0); // Starting position of each vehicle
+		int step = 0; // The starting step for each vehicle
+
+		for (int j = 1; j <= it->second[0]; j++) // Iterate for each ride of the current vehicle
+		{
+			int ride_score = 0; // Contains the score of the current ride
+			int nr_of_current_ride = it->second[j];
+			vector<int> current_ride = ds.rides[nr_of_current_ride];
+
+			int a = current_ride[0];
+			int b = current_ride[1];
+			int x = current_ride[2];
+			int y = current_ride[3];
+			int earliest_start = current_ride[4];
+			int latest_finish = current_ride[5];
+			
+			int distance_from_position_to_start = abs(a - position.first) + abs(b - position.second); // Distance from current position to the start intersection of the ride
+			int distance_from_start_to_finish = abs(x - a) + abs(y - b); // Distance from the start intersection to the finish intersection of the ride
+			int distance_from_position_to_finish = distance_from_position_to_start + distance_from_start_to_finish; // The distance which the vehicle travels
+			
+			step += distance_from_position_to_finish;
+			if (step > latest_finish)
+				goto fundi;
+			else
+				ride_score += distance_from_start_to_finish;
+
+			if (distance_from_position_to_start == 0) {
+				ride_score += bonus;
+			}
+
+			position = make_pair(x, y); // At the end of the ride the vehicle is located at the finish intersection
+			
+			fundi:
+			vehicle_score += ride_score;
+		}
+		result += vehicle_score;
+	}
+
 	// Test your function by using both solutions of Enes and Lendrit
 	return result;
 }
+
 map<int, vector<int>> get_initial_solution_variant_1(data_set ds) {
 	// Variant 1 - Fully random, to be done by Enes
 	map<int, vector<int>> result;
