@@ -10,6 +10,8 @@
 #include <chrono>
 #include <ctime>
 #include <iomanip>
+#include <math.h>
+#include <stdexcept> // std::runtime_error
 using namespace std;
 
 //Parameters
