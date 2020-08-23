@@ -135,9 +135,242 @@ struct data_set {
 
 	}
 };
+
 struct submission
 {
-	map<int, vector<int>> get_initial_solution_variant_1(data_set ds) {
+	map<int, vector<int>> fleets;
+
+	vector<int> fleet1;
+	vector<int> fleet2;
+	vector<int> fleet3;
+	vector<int> fleet4;
+	vector<int> fleet5;
+
+	submission() {
+		srand(time(NULL));                                         //seeding random numbers
+
+		data_set ds;
+		ds.R = 20;
+		ds.C = 17;
+		ds.F = 5;
+		ds.N = 15;
+		ds.B = 3;
+		ds.T = 36;
+
+		int random_numbers[4];
+		int sum = 0;
+
+		for (int i = 0; i < 4; i++)
+		{
+		label:
+			random_numbers[i] = rand() % 4;                       //   4 vehicles e para ka sa rruge(i caktuam random) kan mi pershkru , prej tynev ma s'shumti njo munet mi pershkru 3 rruge
+			if (random_numbers[i] == 0)
+				goto label;
+			sum = sum + random_numbers[i];
+		}
+
+		int assigned_rides[15];                                  // Vargu qe ruan se cilat rruge jane te pershkruare (ne menyre qe mos ti pershkruajme per te n ten here)
+
+		for (int i = 0; i < 15; i++)
+			assigned_rides[i] = -1;								//Fillimisht e inicializojme me -1 - sha
+
+		fleet1.push_back(random_numbers[0]);
+
+		for (int i = 0; i < random_numbers[0]; i++)
+		{
+		label_1:
+			int x = rand() % 15;
+
+			assigned_rides[i] = x;
+			//vehicle 1 - shit ja caktum random rides
+			if (i == 0)
+				goto fleet;
+			else
+			{
+				for (int j = 0; j < i; j++)
+				{
+					if (assigned_rides[j] == x)
+					{
+						goto label_1;
+					}
+				}
+			}
+		fleet:
+			fleet1.push_back(x);
+		}
+
+		fleet2.push_back(random_numbers[1]);
+
+		for (int i = random_numbers[0]; i < random_numbers[0] + random_numbers[1]; i++)
+		{
+		label_2:
+			int x = rand() % 15;
+			for (int j = 0; j < i; j++)
+			{
+				if (x == assigned_rides[j])
+					goto label_2;
+			}
+			assigned_rides[i] = x;
+			//vehicle 2 - shit ja caktum random rides
+			fleet2.push_back(x);
+		}
+
+		fleet3.push_back(random_numbers[2]);
+
+		for (int i = random_numbers[0] + random_numbers[1]; i < random_numbers[0] + random_numbers[1] + random_numbers[2]; i++)
+		{
+		label_3:
+			int x = rand() % 15;
+			for (int j = 0; j < i; j++)
+			{
+				if (x == assigned_rides[j])									//vehicle 3 - shit ja caktum random rides
+					goto label_3;
+			}
+			assigned_rides[i] = x;
+			fleet3.push_back(x);
+		}
+
+		fleet4.push_back(random_numbers[3]);
+
+		for (int i = random_numbers[0] + random_numbers[1] + random_numbers[2]; i < sum; i++) {
+		label_4:
+			int x = rand() % 15;
+
+			for (int j = 0; j < i; j++)
+			{
+				if (x == assigned_rides[j])									//vehicle 4 - shit ja caktum random rides
+					goto label_4;
+			}
+			assigned_rides[i] = x;
+			fleet4.push_back(x);
+		}
+
+		fleet5.push_back(15 - sum);
+
+		for (int i = sum; i < 15; i++)
+		{
+		label_5:
+			int x = rand() % 15;
+			for (int j = 0; j < i; j++)
+			{
+				if (x == assigned_rides[j])									//vehicle 5 - shit ja caktum random rides
+					goto label_5;
+			}
+
+			assigned_rides[i] = x;
+
+			fleet5.push_back(x);
+		}
+
+		fleets.insert(pair<int, vector<int>>(0, fleet1));
+		fleets.insert(pair<int, vector<int>>(1, fleet2));
+		fleets.insert(pair<int, vector<int>>(2, fleet3));
+		fleets.insert(pair<int, vector<int>>(3, fleet4));
+		fleets.insert(pair<int, vector<int>>(4, fleet5));
+
+		//Assign rides manually
+		// Make a test with F=5 fleets and N=15 rides
+		// Make a hard coded (or even better a random) solution by making sure that all constraints are satisfied
+		// Save the solution of fleets to the file with the name of the variable solution_path
+		// Test the functionality of the code in the main function
+	}
+	void show_assigned_roads(data_set ds) {
+		ofstream csv_file(solution_path);
+		map<int, vector<int>> fleets = get_initial_solution_variant_1(ds) ;
+		for (map<int, vector<int>>::iterator itr = fleets.begin(); itr != fleets.end(); itr++)
+		{
+			for (int j = 0; j < itr->second.size(); j++)
+			{
+				if (j == 0)
+					csv_file << itr->second.at(j);
+				else
+					csv_file << " " << itr->second.at(j);
+			}
+			csv_file << endl;
+		}
+	}
+};
+
+map<int, vector<int>> read_solution_file(string solution_name) {		// Used to test get_score function, DOESN'T WORK
+	map<int, vector<int>> result;
+	ifstream mySolution(solution_name);
+	if (mySolution.is_open()) {
+		string line;
+		int i = 0;
+		while (getline(mySolution, line)) {
+			vector<int> row;
+			stringstream ss_line(line);
+			int number;
+			while (ss_line >> number) {
+				row.push_back(number);
+			}
+			result.insert(pair<int, vector<int>>(i, row));
+			i++;
+		}
+	}
+	else
+		throw runtime_error("Could not open solution");
+
+	return result;
+}
+
+int get_score(data_set ds, map<int, vector<int>> fleets) {// To be done by Erlis
+
+	int result = 0; // Contains the score of all vehicles combined including bonuses
+	/*
+	We assume that each ride is assigned to a vehicle only once
+	and that M (the first value of each vector of the map) is always
+	the number of rides assigned to the respective vehicle
+	*/
+	int bonus = ds.B;
+
+	for (auto it = fleets.begin(); it != fleets.end(); it++) // Iterate for each vehicle
+	{
+		int vehicle_score = 0; // Contains the score of the current vehicle
+		pair<int, int> position(0, 0); // Starting position of each vehicle
+		int step = 0; // The starting step for each vehicle
+
+		for (int j = 1; j < it->second.size(); j++) // Iterate for each ride of the current vehicle
+		{
+			int ride_score = 0; // Contains the score of the current ride
+			int nr_of_current_ride = it->second[j];
+			ride* current_ride = ds.rides[nr_of_current_ride];
+
+			int a = current_ride->a;
+			int b = current_ride->b;
+			int x = current_ride->x;
+			int y = current_ride->y;
+			int earliest_start = current_ride->s;
+			int latest_finish = current_ride->f;
+
+			int distance_from_position_to_start = abs(a - position.first) + abs(b - position.second); // Distance from current position to the start intersection of the ride
+			int distance_from_start_to_finish = abs(x - a) + abs(y - b); // Distance from the start intersection to the finish intersection of the ride
+			
+			int distance_from_position_to_finish = distance_from_position_to_start + distance_from_start_to_finish; // The distance which the vehicle travels
+			if(step + distance_from_position_to_start < earliest_start) // Including the waiting time until the earliest start
+				distance_from_position_to_finish += earliest_start - (step + distance_from_position_to_start);
+				
+			step += distance_from_position_to_finish;
+			if (step > latest_finish)
+				goto fundi;
+			else {
+				ride_score += distance_from_start_to_finish;
+				if((step - distance_from_start_to_finish) == earliest_start)
+					ride_score += bonus;
+			}
+			
+			position = make_pair(x, y); // At the end of the ride the vehicle is located at the finish intersection
+
+		fundi:
+			vehicle_score += ride_score;
+		}
+		result += vehicle_score;
+	}
+	// Test your function by using both solutions of Enes and Lendrit
+	return result;
+}
+
+map<int, vector<int>> get_initial_solution_variant_1(data_set ds) {
 		// Variant 1 - Fully random, to be done by Enes
 		map<int, vector<int>> result;
 		vector<int>* vehicles = new vector<int>[ds.F];
@@ -221,109 +454,6 @@ struct submission
 		}
 		return result;
 	}
-
-	void show_assigned_roads(data_set ds) {
-		ofstream csv_file(solution_path);
-		map<int, vector<int>> vehicles = get_initial_solution_variant_1(ds);
-		for (map<int, vector<int>>::iterator itr = vehicles.begin(); itr != vehicles.end(); itr++)
-		{
-			for (int j = 0; j < itr->second.size(); j++)
-			{
-				if (j == 0)
-					csv_file << itr->second.at(j);
-				else
-					csv_file << " " << itr->second.at(j);
-			}
-			csv_file << endl;
-		}
-		csv_file.close();
-	}
-};
-map<int, vector<int>> read_solution_file(string solution_name) {		// Used to test get_score function, DOESN'T WORK
-	map<int, vector<int>> result;
-	ifstream mySolution(solution_name);
-	if (mySolution.is_open()) {
-		string line;
-		int i = 0;
-		while (getline(mySolution, line)) {
-			vector<int> row;
-			stringstream ss_line(line);
-			int number;
-			while (ss_line >> number) {
-				row.push_back(number);
-			}
-			result.insert(pair<int, vector<int>>(i, row));
-			i++;
-		}
-	}
-	else
-		throw runtime_error("Could not open solution");
-
-	return result;
-}
-
-int get_score(data_set ds, map<int, vector<int>> fleets) {// To be done by Erlis
-
-	int result = 0; // Contains the score of all vehicles combined including bonuses
-	/*
-	We assume that each ride is assigned to a vehicle only once
-	and that M (the first value of each vector of the map) is always
-	the number of rides assigned to the respective vehicle
-	*/
-	int bonus = ds.B;
-
-	for (auto it = fleets.begin(); it != fleets.end(); it++) // Iterate for each vehicle
-	{
-		int vehicle_score = 0; // Contains the score of the current vehicle
-		pair<int, int> position(0, 0); // Starting position of each vehicle
-		int step = 0; // The starting step for each vehicle
-
-		for (int j = 1; j < it->second.size(); j++) // Iterate for each ride of the current vehicle
-		{
-			int ride_score = 0; // Contains the score of the current ride
-			int nr_of_current_ride = it->second[j];
-			ride* current_ride = ds.rides[nr_of_current_ride];
-
-			int a = current_ride->a;
-			int b = current_ride->b;
-			int x = current_ride->x;
-			int y = current_ride->y;
-			int earliest_start = current_ride->s;
-			int latest_finish = current_ride->f;
-
-			int distance_from_position_to_start = abs(a - position.first) + abs(b - position.second); // Distance from current position to the start intersection of the ride
-			int distance_from_start_to_finish = abs(x - a) + abs(y - b); // Distance from the start intersection to the finish intersection of the ride
-			
-			int distance_from_position_to_finish = distance_from_position_to_start + distance_from_start_to_finish; // The distance which the vehicle travels
-			if(step + distance_from_position_to_start < earliest_start) // Including the waiting time until the earliest start
-				distance_from_position_to_finish += earliest_start - (step + distance_from_position_to_start);
-				
-			step += distance_from_position_to_finish;
-			if (step > latest_finish)
-				goto fundi;
-			else {
-				ride_score += distance_from_start_to_finish;
-				if((step - distance_from_start_to_finish) == earliest_start)
-					ride_score += bonus;
-			}
-			
-			position = make_pair(x, y); // At the end of the ride the vehicle is located at the finish intersection
-
-		fundi:
-			vehicle_score += ride_score;
-		}
-		result += vehicle_score;
-	}
-	// Test your function by using both solutions of Enes and Lendrit
-	return result;
-}
-
-map<int, vector<int>> get_initial_solution_variant_1(data_set ds) {
-	// Variant 1 - Fully random, to be done by Enes
-	map<int, vector<int>> result;
-	//Implementation goes here ...
-	//Test your solution in the main function
-	return result;
 }
 
 map<int, vector<int>> get_initial_solution_variant_2(data_set ds) {
@@ -368,7 +498,7 @@ int main() {
 	}
 	//Test of submission structure
 	submission s;
-	s.show_assigned_roads();
+	s.show_assigned_roads(d1);
 	
 	// Test get_score function
 	data_set ds;
