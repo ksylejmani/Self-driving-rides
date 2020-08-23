@@ -135,7 +135,6 @@ struct data_set {
 
 	}
 };
-
 struct submission
 {
 	map<int, vector<int>> get_initial_solution_variant_1(data_set ds) {
@@ -240,7 +239,6 @@ struct submission
 		csv_file.close();
 	}
 };
-
 map<int, vector<int>> read_solution_file(string solution_name) {		// Used to test get_score function, DOESN'T WORK
 	map<int, vector<int>> result;
 	ifstream mySolution(solution_name);
@@ -320,6 +318,13 @@ int get_score(data_set ds, map<int, vector<int>> fleets) {// To be done by Erlis
 	return result;
 }
 
+map<int, vector<int>> get_initial_solution_variant_1(data_set ds) {
+	// Variant 1 - Fully random, to be done by Enes
+	map<int, vector<int>> result;
+	//Implementation goes here ...
+	//Test your solution in the main function
+	return result;
+}
 
 map<int, vector<int>> get_initial_solution_variant_2(data_set ds) {
 	// Variant 2 - Smart random, to be done by Lendrit
@@ -363,7 +368,7 @@ int main() {
 	}
 	//Test of submission structure
 	submission s;
-	s.show_assigned_roads(d1);
+	s.show_assigned_roads();
 	
 	// Test get_score function
 	data_set ds;
