@@ -16,11 +16,13 @@
 
 
 data_set::data_set() {
-	// Read the data from the file with name from variable instance_name  
 	instance = instance_path;
 
-	// Place the data from the file in the respective variables and arrays  
+	// Read and place the data from the file in the respective variables and arrays  
 	read_instance_file(instance);
+
+	//optimize storage
+	rides.shrink_to_fit();
 
 	// Find the next close rides for each ride
 	for (ride* d_ride : rides)
@@ -44,6 +46,8 @@ void data_set::process_first_line(string first_line) {
 	//initiate data_set  
 	R = values[0];	C = values[1];	F = values[2];
 	N = values[3];	B = values[4];	T = values[5];
+
+	rides.reserve(N); //optimize the vector rides to allocate accordingly
 }
 
 void data_set::process_ride_lines(string ride_line) {
