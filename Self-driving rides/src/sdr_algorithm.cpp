@@ -4,7 +4,7 @@
 #include <utility>
 #include <unordered_map>
 
-#include "/include/global_variables_h"
+#include "../include/global_variables_h.h"
 #include "../include/ride_h.h"
 #include "../include/data_set_h.h"
 #include "../include/submission_h.h"
