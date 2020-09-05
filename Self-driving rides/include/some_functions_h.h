@@ -1,7 +1,7 @@
 #ifndef SOME_FUNCTIONS_H
 #define SOME_FUNCTIONS_H
 
-#include <map>
+#include <unordered_map>
 #include <vector>
 #include <string>
 
@@ -9,7 +9,7 @@
 
 using namespace std;
 
-map<int, vector<int>>	 read_solution_file(string solution_name);
-int						 get_score(data_set ds, map<int, vector<int>> fleets);
+unordered_map<int, vector<int>>	 read_solution_file(string solution_name);
+int						 get_score(data_set ds, unordered_map<int, vector<int>> fleets);
 
 #endif

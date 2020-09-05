@@ -2,14 +2,14 @@
 #define SUBMISSION_H
 
 #include <vector>
-#include <map>
+#include <unordered_map>
 
 #include "data_set_h.h"
 
 using namespace std;
 
 struct submission{
-	map<int, vector<int>> fleets;
+	unordered_map<int, vector<int>> fleets;
 
 	vector<int> fleet1;
 	vector<int> fleet2;
