@@ -1,4 +1,4 @@
-#include <map>
+#include <unordered_map>
 #include <vector>
 #include <string>
 #include <sstream>
@@ -11,8 +11,8 @@
 
 using namespace std;
 
-map<int, vector<int>> read_solution_file(string solution_name) {		// Used to test get_score function, DOESN'T WORK
-	map<int, vector<int>> result;
+unordered_map<int, vector<int>> read_solution_file(string solution_name) {		// Used to test get_score function, DOESN'T WORK
+	unordered_map<int, vector<int>> result;
 	ifstream mySolution(solution_name);
 	if (mySolution.is_open()) {
 		string line;
@@ -34,7 +34,7 @@ map<int, vector<int>> read_solution_file(string solution_name) {		// Used to tes
 	return result;
 }
 
-int get_score(data_set ds, map<int, vector<int>> fleets) {// To be done by Erlis
+int get_score(data_set ds, unordered_map<int, vector<int>> fleets) {// To be done by Erlis
 
 	int result = 0; // Contains the score of all vehicles combined including bonuses
 	/*
@@ -89,5 +89,3 @@ int get_score(data_set ds, map<int, vector<int>> fleets) {// To be done by Erlis
 	// Test your function by using both solutions of Enes and Lendrit
 	return result;
 }
-
-//

@@ -1,6 +1,6 @@
 #include <vector>
 #include <utility>
-#include <map>
+#include <unordered_map>
 #include <sstream>
 #include <fstream>
 #include <chrono>
@@ -140,8 +140,8 @@ submission::submission() {
 }
 void submission::show_assigned_roads(data_set ds) {
 	ofstream csv_file(solution_path);
-	map<int, vector<int>> fleets = get_initial_solution_variant_1(ds) ;
-	for (map<int, vector<int>>::iterator itr = fleets.begin(); itr != fleets.end(); itr++)
+	unordered_map<int, vector<int>> fleets = get_initial_solution_variant_1(ds) ;
+	for (unordered_map<int, vector<int>>::iterator itr = fleets.begin(); itr != fleets.end(); itr++)
 	{
 		for (int j = 0; j < itr->second.size(); j++)
 		{

@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <utility>
-#include <map>
+#include <unordered_map>
 
 #include "../include/global_variables_h.h"
 #include "../include/ride_h.h"
@@ -35,11 +35,11 @@ int main() {
 	// Test get_score function
 	data_set ds;
 	/*
-	map<int, vector<int>> fleets = read_solution_file(solution_path); DOESN'T WORK
+	unordered_map<int, vector<int>> fleets = read_solution_file(solution_path); DOESN'T WORK
 	int score = get_score(ds, fleets);
 	cout << "Score: " << score << endl;
 	*/
-	map<int, vector<int>> fleets; // Putting solution values manually because the read_solution_file() function isn't working
+	unordered_map<int, vector<int>> fleets; // Putting solution values manually because the read_solution_file() function isn't working
 	vector<int> vehicle_1 {1, 0}; // Solution values for a_example.out
 	vector<int> vehicle_2 {2, 2, 1};
 	fleets.insert(pair<int, vector<int>> (0, vehicle_1));
@@ -49,7 +49,7 @@ int main() {
 	
 	cout<<"\nget_initial_solution_variant_1\n";
 	// Test get_initial_solution_variant1
-	fleets= get_initial_solution_variant_1(ds);
+	fleets = get_initial_solution_variant_1(ds);
 	int score1 = get_score(ds, fleets);
 	cout << "Score1: " << score1 << endl;
 	
