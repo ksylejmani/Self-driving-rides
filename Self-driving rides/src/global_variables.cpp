@@ -7,6 +7,6 @@ const int difference_earliest_start_time = 5;
 const int difference_latest_finish_time = 5;
 const double initial_solution_time_left_margin=0.1;
 
-string instance_name = "b_should_be_easy";
+string instance_name = "e_high_bonus";
 string instance_path = "dataset/" + instance_name + ".in";
 string solution_path = "solution/" + instance_name + ".out";
