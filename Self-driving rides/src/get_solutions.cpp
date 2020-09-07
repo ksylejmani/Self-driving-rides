@@ -5,6 +5,7 @@
 #include <ctime>
 #include <algorithm>
 
+#include "../include/global_variables_h.h"
 #include "../include/get_solutions_h.h"
 #include "../include/data_set_h.h"
 
@@ -29,7 +30,7 @@ vector <int> unassigned_rides;
 			//list of the rides that are unaffordable for the car i
 			vector <int> unaffordable_rides;
 			//while there is some time left, do ...
-			while (time_left > 0.1*ds.T)
+			while (time_left > initial_solution_time_left_margin*ds.T)
 			{
 				int random_ride = unassigned_rides.back();
 				unassigned_rides.pop_back();
@@ -59,7 +60,7 @@ vector <int> unassigned_rides;
 					time_left = ds.T - (earliest_time + distance_between_intersections);
 					Counters.at(i)++;
 					//if all rides are assigned or if we have checked all rides for the car i there is nothing left to check so go to the next car (break)
-					if ((assigned_rides.size() == ds.N) || (unaffordable_rides.size() + assigned_rides.size() == ds.N) || time_left <= 0.1*ds.T ) {
+					if ((assigned_rides.size() == ds.N) || (unaffordable_rides.size() + assigned_rides.size() == ds.N) || time_left <= initial_solution_time_left_margin*ds.T ) {
 						unassigned_rides.insert(unassigned_rides.end(),unaffordable_rides.begin(), unaffordable_rides.end());
 						break;
 					}
