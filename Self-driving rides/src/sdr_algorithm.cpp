@@ -31,7 +31,7 @@ int main() {
 	//Test of submission structure
 	submission s;
 	s.show_assigned_roads(d1);
-	
+
 	// Test get_score function
 	data_set ds;
 	/*
@@ -46,12 +46,12 @@ int main() {
 	fleets.insert(pair<int, vector<int>> (1, vehicle_2));
 	int score = get_score(ds, fleets);
 	cout << "Score: " << score << endl;
-	
+
 	cout<<"\nget_initial_solution_variant_1\n";
 	// Test get_initial_solution_variant1
 	fleets = get_initial_solution_variant_1(ds);
 	int score1 = get_score(ds, fleets);
 	cout << "Score1: " << score1 << endl;
-	
+	system("Pause");
 	return 0;
 }

@@ -6,8 +6,9 @@
 #include <chrono>
 #include <ctime>
 
-#include "submission_h.h"
-#include "get_solutions_h.h"
+#include "../include/submission_h.h"
+#include "../include/get_solutions_h.h"
+
 using namespace std;
 
 submission::submission() {

@@ -12,9 +12,9 @@
 using namespace std;
 
 vector <int> unassigned_rides;
-	map<int, vector<int>> get_initial_solution_variant_1(data_set ds) {
+	unordered_map<int, vector<int>> get_initial_solution_variant_1(data_set ds) {
 		// Variant 1 - Fully random, to be done by Enes
-		map<int, vector<int>> result;
+		unordered_map<int, vector<int>> result;
 		vector<int>* vehicles = new vector<int>[ds.F];
 		srand(time(NULL));
 		list<int> assigned_rides;

@@ -6,8 +6,8 @@
 #include <stdexcept> // std::runtime_error
 #include <math.h>
 
-#include "some_functions_h.h"
-#include "data_set_h.h"
+#include "../include/some_functions_h.h"
+#include "../include/data_set_h.h"
 
 using namespace std;
 
@@ -65,11 +65,11 @@ int get_score(data_set ds, unordered_map<int, vector<int>> fleets) {// To be don
 
 			int distance_from_position_to_start = abs(a - position.first) + abs(b - position.second); // Distance from current position to the start intersection of the ride
 			int distance_from_start_to_finish = abs(x - a) + abs(y - b); // Distance from the start intersection to the finish intersection of the ride
-			
+
 			int distance_from_position_to_finish = distance_from_position_to_start + distance_from_start_to_finish; // The distance which the vehicle travels
 			if(step + distance_from_position_to_start < earliest_start) // Including the waiting time until the earliest start
 				distance_from_position_to_finish += earliest_start - (step + distance_from_position_to_start);
-				
+
 			step += distance_from_position_to_finish;
 			if (step > latest_finish)
 				goto fundi;
@@ -78,7 +78,7 @@ int get_score(data_set ds, unordered_map<int, vector<int>> fleets) {// To be don
 				if((step - distance_from_start_to_finish) == earliest_start)
 					ride_score += bonus;
 			}
-			
+
 			position = make_pair(x, y); // At the end of the ride the vehicle is located at the finish intersection
 
 		fundi:
