@@ -6,8 +6,9 @@
 
 #include "data_set_h.h"
 
-unordered_map<int, vector<int>> get_initial_solution_variant_1(data_set ds);
-unordered_map<int, vector<int>> get_initial_solution_variant_2(data_set ds);
-unordered_map<int, vector<int>> get_greedy_local_search_solution(data_set ds);
+extern vector<int> unassigned_rides_variant_1;
+unordered_map<int, vector<int>> get_initial_solution_variant_1 (const data_set&);
+unordered_map<int, vector<int>> get_initial_solution_variant_2 (const data_set&);
+unordered_map<int, vector<int>> get_greedy_local_search_solution (const data_set&);
 
 #endif
