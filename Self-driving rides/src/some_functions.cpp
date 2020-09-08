@@ -4,37 +4,46 @@
 #include <sstream>
 #include <fstream>
 #include <stdexcept> // std::runtime_error
-#include <math.h>
+#include <math.h>	//abs()
+#include <stdlib.h> //exit()
+#include <iostream> //cerr<<
 
 #include "../include/some_functions_h.h"
 #include "../include/data_set_h.h"
+#include "../include/global_variables_h.h"
 
 using namespace std;
 
-unordered_map<int, vector<int>> read_solution_file(string solution_name) {		// Used to test get_score function, DOESN'T WORK
-	unordered_map<int, vector<int>> result;
-	ifstream mySolution(solution_name);
-	if (mySolution.is_open()) {
-		string line;
-		int i = 0;
-		while (getline(mySolution, line)) {
-			vector<int> row;
-			stringstream ss_line(line);
-			int number;
-			while (ss_line >> number) {
-				row.push_back(number);
-			}
-			result.insert(pair<int, vector<int>>(i, row));
-			i++;
-		}
-	}
-	else
-		throw runtime_error("Could not open solution");
 
-	return result;
+vector<int> split_string_to_ints(string line) {
+	stringstream ss_line(line);
+	vector<int> values;
+    for (int number; ss_line >> number;){
+        values.push_back(number);
+    }
+	return values;
 }
 
-int get_score(data_set ds, unordered_map<int, vector<int>> fleets) {// To be done by Erlis
+unordered_map<int, vector<int>> read_solution_file(){
+	unordered_map<int, vector<int>> fleets;
+	ifstream wf(solution_path);
+	if (wf.is_open()) {
+		string line;
+		int line_number = 1;   // INITIAL VALUE
+		while (getline(wf, line)){
+			fleets.insert(make_pair(line_number++, split_string_to_ints(line)));
+		}
+		wf.close();
+	}
+	else{
+		cerr<<"\n\nCould not open solution file!\n\n";
+		exit(EXIT_FAILURE);
+	}
+	return fleets;
+}
+
+
+int get_score(const data_set& ds, unordered_map<int, vector<int>> fleets) {// To be done by Erlis
 
 	int result = 0; // Contains the score of all vehicles combined including bonuses
 	/*
@@ -56,12 +65,9 @@ int get_score(data_set ds, unordered_map<int, vector<int>> fleets) {// To be don
 			int nr_of_current_ride = it->second[j];
 			ride* current_ride = ds.rides[nr_of_current_ride];
 
-			int a = current_ride->a;
-			int b = current_ride->b;
-			int x = current_ride->x;
-			int y = current_ride->y;
-			int earliest_start = current_ride->s;
-			int latest_finish = current_ride->f;
+			int a = current_ride->a;	int b = current_ride->b;
+			int x = current_ride->x;	int y = current_ride->y;
+			int earliest_start = current_ride->s;	int latest_finish = current_ride->f;
 
 			int distance_from_position_to_start = abs(a - position.first) + abs(b - position.second); // Distance from current position to the start intersection of the ride
 			int distance_from_start_to_finish = abs(x - a) + abs(y - b); // Distance from the start intersection to the finish intersection of the ride

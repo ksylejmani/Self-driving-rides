@@ -25,8 +25,9 @@ data_set::data_set() {
 	rides.shrink_to_fit();
 
 	// Find the next close rides for each ride
-	for (ride* d_ride : rides)
+	for (ride* d_ride : rides){
 		find_k_closest_rides(d_ride, no_close_next_rides);
+	}
 	// Test the functionality of the code in the main function
 }
 

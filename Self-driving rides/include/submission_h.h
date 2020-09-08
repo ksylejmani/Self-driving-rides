@@ -9,16 +9,13 @@
 using namespace std;
 
 struct submission{
+	//Goals:
+	//Get solution via consturctor
+	//Place solution to a file
 	unordered_map<int, vector<int>> fleets;
 
-	vector<int> fleet1;
-	vector<int> fleet2;
-	vector<int> fleet3;
-	vector<int> fleet4;
-	vector<int> fleet5;
-
-	submission();
-	void show_assigned_roads(data_set ds);
+	submission(const unordered_map<int, vector<int>>&);
+	void output_solution();
 
 };
 

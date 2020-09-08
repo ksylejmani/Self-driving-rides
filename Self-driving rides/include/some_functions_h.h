@@ -9,7 +9,9 @@
 
 using namespace std;
 
-unordered_map<int, vector<int>>	 read_solution_file(string solution_name);
-int get_score(data_set ds, unordered_map<int, vector<int>> fleets);
+vector<int> 						split_string_to_ints(string);
+unordered_map<int, vector<int>>		read_solution_file();
+
+int get_score (const data_set&, unordered_map<int, vector<int>>);
 
 #endif
