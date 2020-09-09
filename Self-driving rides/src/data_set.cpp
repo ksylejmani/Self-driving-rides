@@ -13,10 +13,15 @@
 #include "../include/data_set_h.h"
 #include "../include/ride_h.h"
 #include "../include/global_variables_h.h"
+#include "../include/some_functions_h.h"
 
 
-data_set::data_set() {
+data_set::data_set(){}
+
+data_set::data_set(string instance_path) {
 	instance = instance_path;
+
+	Timing t("data_set");
 
 	// Read and place the data from the file in the respective variables and arrays  
 	read_instance_file(instance);
@@ -59,6 +64,7 @@ void data_set::process_ride_lines(string ride_line) {
 }
 
 void data_set::read_instance_file(string instance_name) {
+	Timing t("read_instance_file");
 	ifstream wf(instance_name);
 	if (wf.is_open()) {
 		//read first line of instance_name
@@ -104,4 +110,9 @@ void data_set::find_k_closest_rides(ride* given_ride, int K) {
 	for (int i = 0; i < min(K, N - 1); i++)
 		given_ride->close_next_rides.push_back(find_close_ride(given_ride));
 
+}
+
+void data_set::get_instance_details(vector<int>& info){
+	info[0] = this->R; info[1] = this->C; info[2] = this->F;
+	info[3] = this->N; info[4] = this->B; info[5] = this->T;
 }

@@ -13,6 +13,7 @@ extern const int no_replace_next_rides;
 extern const int difference_earliest_start_time;
 extern const int difference_latest_finish_time;
 extern const double initial_solution_time_left_margin;
+extern const double score_satisfactory_coefficient;
 extern string 	 instance_name;
 extern string	 instance_path;
 extern string	 solution_path;

@@ -44,7 +44,6 @@ unordered_map<int, vector<int>> read_solution_file(){
 
 
 int get_score(const data_set& ds, unordered_map<int, vector<int>> fleets) {// To be done by Erlis
-
 	int result = 0; // Contains the score of all vehicles combined including bonuses
 	/*
 	We assume that each ride is assigned to a vehicle only once
@@ -92,6 +91,7 @@ int get_score(const data_set& ds, unordered_map<int, vector<int>> fleets) {// To
 		}
 		result += vehicle_score;
 	}
+
 	// Test your function by using both solutions of Enes and Lendrit
 	return result;
 }

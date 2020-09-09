@@ -6,6 +6,7 @@ const int no_replace_next_rides =3;
 const int difference_earliest_start_time = 5;
 const int difference_latest_finish_time = 5;
 const double initial_solution_time_left_margin=0.1;
+const double score_satisfactory_coefficient = 0.5;
 
 string instance_name = "e_high_bonus";
 string instance_path = "dataset/" + instance_name + ".in";

@@ -1,0 +1,49 @@
+procedure stochastic hill-climber
+
+
+	//get_inital_solution
+    //get-score
+    //if score == goal( dataset.T)
+    	//exit
+
+    //loop
+    	//get random unassigned ride
+    	//tweak solution using random unassigend ride
+    	//get c_score
+    	//if c_score > score
+	    	//keep tweak
+    	//else 
+    		//undo tweak
+
+
+pseudocode for simple hill climbing
+
+//get_initial_solution
+//get_score
+ //if score == goal( dataset.T)
+    //exit
+//loop
+	//tweak solution
+	
+Algorithm for Simple Hill Climbing:
+Step 1: Evaluate the initial state, if it is goal state then return success and Stop.
+Step 2: Loop Until a solution is found or there is no new operator left to apply.
+Step 3: Select and apply an operator to the current state.
+Step 4: Check new state:
+If it is goal state, then return success and quit.
+Else if it is better than the current state then assign new state as a current state.
+Else if not better than the current state, then return to step2.
+Step 5: Exit.
+
+
+Algorithm for Steepest-Ascent hill climbing:
+Step 1: Evaluate the initial state, if it is goal state then return success and stop, else make current state as initial state.
+Step 2: Loop until a solution is found or the current state does not change.
+Let SUCC be a state such that any successor of the current state will be better than it.
+For each operator that applies to the current state:
+Apply the new operator and generate a new state.
+Evaluate the new state.
+If it is goal state, then return it and quit, else compare it to the SUCC.
+If it is better than SUCC, then set new state as SUCC.
+If the SUCC is better than the current state, then set current state to SUCC.
+Step 5: Exit.

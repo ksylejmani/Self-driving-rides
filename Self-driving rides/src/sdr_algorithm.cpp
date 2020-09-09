@@ -10,12 +10,13 @@
 #include "../include/submission_h.h"
 #include "../include/get_solutions_h.h"
 #include "../include/some_functions_h.h"
+#include "../include/hill_climbing_h.h"
 
 using namespace std;
 
 int main() {
 	//Test run
-	data_set d1;
+	data_set d1(instance_path);
 	// for (ride* d_ride : d1.rides) {
 	// 	//ride from [0, 0] to [1, 3], earliest start 2, latest finish 9
 	// 	cout << "Ride from [" << d_ride->a << ", " << d_ride->b << "] to [" << d_ride->x << ", " << d_ride->y
@@ -43,10 +44,14 @@ int main() {
 	submission variant1(fleets);
 	variant1.output_solution();
 
+	stochastic_hill_climbing(fleets, unassigned_rides_variant_1, d1);
 	// cout << "Unassigned rides: \n";
 	// for(auto it = unassigned_rides_variant_1.begin(); it != unassigned_rides_variant_1.end(); it++){
 	// 	cout<< *it <<" \t";
 	// }
+	int score2 = get_score(d1, fleets);
+	cout << "Score2: " << score2 << endl;
+
 
 	system("pause");
 	return 0;

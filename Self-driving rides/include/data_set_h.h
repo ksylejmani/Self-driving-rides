@@ -13,6 +13,7 @@ struct data_set {
 	vector<ride*>	rides;
 	string 			instance;
 	data_set();
+	data_set(string);
 	
 	vector<int>		split_string_to_ints(string);
 
@@ -24,6 +25,8 @@ struct data_set {
 	ride* 			find_close_ride(ride*);
 
 	void 			find_k_closest_rides(ride*, int);
+
+	void 			get_instance_details(vector<int>&);
 };
 
 #endif
