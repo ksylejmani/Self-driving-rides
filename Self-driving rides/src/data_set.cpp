@@ -1,37 +1,28 @@
-#include <vector>
 #include <algorithm> 
-#include <iostream>
-#include <string>
 #include <utility>
-#include <unordered_map>
 #include <sstream>
 #include <fstream>
 #include <queue>
-#include <iomanip>
 #include <math.h>
 
 #include "../include/data_set_h.h"
-#include "../include/ride_h.h"
-#include "../include/global_variables_h.h"
 #include "../include/some_functions_h.h"
-
+#include "../include/ride_h.h"
+#include "../include/Timing_h.h"
+#include "../include/global_variables_h.h"
 
 data_set::data_set(){}
 
 data_set::data_set(string instance_path) {
 	instance = instance_path;
-
 	Timing t("data_set");
-
 	// Read and place the data from the file in the respective variables and arrays  
 	read_instance_file(instance);
-
 	//optimize storage
 	rides.shrink_to_fit();
-
 	// Find the next close rides for each ride
 	for (ride* d_ride : rides){
-		find_k_closest_rides(d_ride, no_close_next_rides);
+		find_k_closest_rides(d_ride);
 	}
 	// Test the functionality of the code in the main function
 }
@@ -92,26 +83,25 @@ ride* data_set::find_close_ride(ride* given_ride) {
 			continue;
 
 		//Find the closest ride based on the distance between points
-		int check_distance = abs(given_ride->a - check_ride->x) + abs(given_ride->b - check_ride->y);
+		int check_distance = abs(given_ride->x - check_ride->a) + abs(given_ride->y - check_ride->b);
 
 		if (closest_distance >= check_distance) {
-			if (find(given_ride->close_next_rides.begin(), given_ride->close_next_rides.end(), check_ride) == given_ride->close_next_rides.end()) {
+			if ( find (given_ride->close_next_rides.begin(), given_ride->close_next_rides.end(), check_ride) == given_ride->close_next_rides.end()) {
 				closest_ride = check_ride;
 				closest_distance = check_distance;
+				// closest_distance = get_closest_distance(closest_distance, check_distance);
 			}
 		}
 	}
 	return closest_ride;
 }
-
-
-void data_set::find_k_closest_rides(ride* given_ride, int K) {
+void data_set::find_k_closest_rides(ride* given_ride) {
 	//min(K, N - 1) in case K is bigger than the number of rides
-	for (int i = 0; i < min(K, N - 1); i++)
+	int number_of_close_next_rides = min(no_close_next_rides, N - 1);
+	for (int i = 0; i < number_of_close_next_rides ; i++)
 		given_ride->close_next_rides.push_back(find_close_ride(given_ride));
 
 }
-
 void data_set::get_instance_details(vector<int>& info){
 	info[0] = this->R; info[1] = this->C; info[2] = this->F;
 	info[3] = this->N; info[4] = this->B; info[5] = this->T;

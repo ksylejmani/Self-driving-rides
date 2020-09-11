@@ -8,13 +8,14 @@
 
 #include "../include/submission_h.h"
 #include "../include/get_solutions_h.h"
+#include "../include/global_variables_h.h"
+#include "../include/Timing_h.h"
 
 using namespace std;
 
 submission::submission(const unordered_map<int, vector<int>>& fleets){
 	this->fleets = fleets;
 }
-
 
 void submission::output_solution() {
 	ofstream csv_file(solution_path);

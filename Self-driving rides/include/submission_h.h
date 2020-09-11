@@ -4,8 +4,6 @@
 #include <vector>
 #include <unordered_map>
 
-#include "data_set_h.h"
-
 using namespace std;
 
 struct submission{

@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "global_variables_h.h"
-#include "ride_h.h"
+struct ride;
 
 using namespace std;
 
@@ -24,8 +24,9 @@ struct data_set {
 	//Could be private
 	ride* 			find_close_ride(ride*);
 
-	void 			find_k_closest_rides(ride*, int);
+	void 			find_k_closest_rides(ride*);
 
+	void 			get_closest_distance(int, int);
 	void 			get_instance_details(vector<int>&);
 };
 

@@ -1,16 +1,12 @@
-#include <iostream>
-#include <string>
-#include <vector>
 #include <utility>
-#include <unordered_map>
 
-#include "../include/global_variables_h.h"
-#include "../include/ride_h.h"
 #include "../include/data_set_h.h"
 #include "../include/submission_h.h"
 #include "../include/get_solutions_h.h"
 #include "../include/some_functions_h.h"
 #include "../include/hill_climbing_h.h"
+#include "../include/ride_h.h"
+#include "../include/Timing_h.h"
 
 using namespace std;
 
@@ -31,7 +27,7 @@ int main() {
 	// }
 
 	cout<<"\nExistent solution file:\n";
-	unordered_map<int, vector<int>> fleets = read_solution_file();
+	unordered_map<int, vector<int>> fleets;
 	int score = get_score(d1, fleets);
 	cout << "Score: " << score << endl;
 
@@ -44,13 +40,22 @@ int main() {
 	submission variant1(fleets);
 	variant1.output_solution();
 
+	std::cout << "\nunassigened: "<<unassigned_rides_variant_1.size();
+
 	stochastic_hill_climbing(fleets, unassigned_rides_variant_1, d1);
 	// cout << "Unassigned rides: \n";
 	// for(auto it = unassigned_rides_variant_1.begin(); it != unassigned_rides_variant_1.end(); it++){
 	// 	cout<< *it <<" \t";
 	// }
 	int score2 = get_score(d1, fleets);
-	cout << "Score2: " << score2 << endl;
+	cout << "stochastic_hill_climbing Score2: " << score2 << endl;
+
+	int c = 0;
+	for(ride* r1 : d1.rides){
+		if(!r1->assigned)
+			c++;
+	}
+	std::cout <<"\nunassigned: "<< c <<" vs "<<unassigned_rides_variant_1.size();
 
 
 	system("pause");

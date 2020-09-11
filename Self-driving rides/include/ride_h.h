@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include "global_variables_h.h"
+
 using namespace std;
 
 struct ride {

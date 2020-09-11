@@ -11,6 +11,8 @@
 #include "../include/some_functions_h.h"
 #include "../include/data_set_h.h"
 #include "../include/global_variables_h.h"
+#include "../include/ride_h.h"
+#include "../include/Timing_h.h"
 
 using namespace std;
 
