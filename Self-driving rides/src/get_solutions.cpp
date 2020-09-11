@@ -18,7 +18,6 @@ unordered_map<int, vector<int>> get_initial_solution_variant_1(const data_set& d
 	Timing t("get_initial_solution_variant_1");
 	unordered_map<int, vector<int>> result;
 	vector<int>* vehicles = new vector<int>[ds.F];
-	srand(time(NULL));
 	list<int> assigned_rides;
 	//counters count the number of rides we assign to a car
 	vector <int> Counters(ds.F, 0);

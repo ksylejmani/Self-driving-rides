@@ -29,4 +29,5 @@ void submission::output_solution() {
 			csv_file << " " << itr->second.at(j);
 		csv_file << endl;
 	}
+	csv_file.close();
 }

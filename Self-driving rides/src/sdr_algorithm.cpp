@@ -12,7 +12,10 @@ using namespace std;
 
 int main() {
 	//Test run
+	
+	srand(time(NULL));
 	data_set d1(instance_path);
+
 	// for (ride* d_ride : d1.rides) {
 	// 	//ride from [0, 0] to [1, 3], earliest start 2, latest finish 9
 	// 	cout << "Ride from [" << d_ride->a << ", " << d_ride->b << "] to [" << d_ride->x << ", " << d_ride->y
@@ -40,13 +43,9 @@ int main() {
 	submission variant1(fleets);
 	variant1.output_solution();
 
-	std::cout << "\nunassigened: "<<unassigned_rides_variant_1.size();
+	std::cout << "\nunassigened.size(): "<<unassigned_rides_variant_1.size()<<endl;
 
 	stochastic_hill_climbing(fleets, unassigned_rides_variant_1, d1);
-	// cout << "Unassigned rides: \n";
-	// for(auto it = unassigned_rides_variant_1.begin(); it != unassigned_rides_variant_1.end(); it++){
-	// 	cout<< *it <<" \t";
-	// }
 	int score2 = get_score(d1, fleets);
 	cout << "stochastic_hill_climbing Score2: " << score2 << endl;
 
@@ -55,9 +54,7 @@ int main() {
 		if(!r1->assigned)
 			c++;
 	}
-	std::cout <<"\nunassigned: "<< c <<" vs "<<unassigned_rides_variant_1.size();
+	cout <<"\nunassigned: "<< c <<" vs "<<unassigned_rides_variant_1.size();
 
-
-	system("pause");
 	return 0;
 }
