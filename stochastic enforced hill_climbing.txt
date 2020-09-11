@@ -16,14 +16,6 @@ procedure stochastic hill-climber
     		//undo tweak
 
 
-pseudocode for simple hill climbing
-
-//get_initial_solution
-//get_score
- //if score == goal( dataset.T)
-    //exit
-//loop
-	//tweak solution
 	
 Algorithm for Simple Hill Climbing:
 Step 1: Evaluate the initial state, if it is goal state then return success and Stop.
