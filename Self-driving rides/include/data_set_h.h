@@ -14,10 +14,8 @@ struct data_set {
 	string 			instance;
 	data_set();
 	data_set(string);
-	
-	vector<int>		split_string_to_ints(string);
 
-	void 			read_instance_file(string);
+	void 			read_instance_file();
 	void 			process_first_line(string);
 	void 			process_ride_lines(string);
 
@@ -26,7 +24,7 @@ struct data_set {
 
 	void 			find_k_closest_rides(ride*);
 
-	void 			get_closest_distance(int, int);
+	void 			get_closest_distance(int, int); //not yet implemented
 	void 			get_instance_details(vector<int>&);
 };
 

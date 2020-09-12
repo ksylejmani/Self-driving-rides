@@ -7,7 +7,6 @@
 #include "../include/data_set_h.h"
 #include "../include/some_functions_h.h"
 #include "../include/ride_h.h"
-#include "../include/Timing_h.h"
 
 using namespace std;
 
@@ -15,7 +14,6 @@ vector<int> unassigned_rides_variant_1(10);	//Unimportant size
 
 unordered_map<int, vector<int>> get_initial_solution_variant_1(const data_set& ds) {
 	// Variant 1 - Fully random, to be done by Enes
-	Timing t("get_initial_solution_variant_1");
 	unordered_map<int, vector<int>> result;
 	vector<int>* vehicles = new vector<int>[ds.F];
 	list<int> assigned_rides;
