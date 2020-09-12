@@ -39,15 +39,14 @@ int main() {
 	fleets = get_initial_solution_variant_1(d1);
 	int score1 = get_score(d1, fleets);
 	cout << "\nget_initial_solution_variant_1 Score: " << score1 << endl;
-
-	submission variant1(fleets);
-	variant1.output_solution();
+	cerr << "\nget_initial_solution_variant_1 Score: " << score1 << endl;
 
 	std::cout << "\nunassigened.size(): "<<unassigned_rides_variant_1.size()<<endl;
 
 	stochastic_hill_climbing(fleets, unassigned_rides_variant_1, d1);
 	int score2 = get_score(d1, fleets);
 	cout << "stochastic_hill_climbing Score2: " << score2 << endl;
+	cerr << "stochastic_hill_climbing Score2: " << score2 << endl;
 
 	int c = 0;
 	for(ride* r1 : d1.rides){
@@ -55,6 +54,9 @@ int main() {
 			c++;
 	}
 	cout <<"\nunassigned: "<< c <<" vs "<<unassigned_rides_variant_1.size();
+
+	submission hill_climbing(fleets);
+	hill_climbing.output_solution();
 
 	return 0;
 }

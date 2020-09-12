@@ -22,78 +22,75 @@ void stochastic_hill_climbing(unordered_map<int, vector<int>>& fleets, vector<in
 	tweak_solution stochastic(fleets, unassigned_rides, d1);
 
     int score = get_score(d1, fleets);
-    for(int i = 0; i < d1.N; i++){
-	    if (score >=  score_satisfactory_coefficient * d1.T * d1.F ){
-	    	//what is the highest possible score?
+    
+    for(int i = 0; i< d1.N; i++){
+    	//what is the highest possible score?
+
+	    if(!stochastic.tweak())
 	    	break;
-	    }		
-	    stochastic.tweak();
+
 		int c_score = get_score(d1, fleets);
+		cout<<"Score after tweak: "<<c_score<<endl;
 		if(c_score > score){
 			stochastic.keep_replace();
-			tee<<"Success! Iteration nr : "<<i<<" ";
+			tee<<"Success! Iteration nr : "<<i<<"==========\n";
 			score = c_score;
 		}
 		else{
-			stochastic.undo_replace();
+			stochastic.undo_tweak();
 		}
     }
 }
 
-tweak_solution::tweak_solution(unordered_map<int, vector<int>>& fleets, vector<int>& unassigned_rides, data_set& d1){
-	this->fleets = fleets;
-	this->unassigned_rides = unassigned_rides;
-	this->d1 = d1;
-
+tweak_solution::tweak_solution(unordered_map<int, vector<int>>& fleets, vector<int>& unassigned_rides, data_set& d1)
+	: fleets(fleets), unassigned_rides(unassigned_rides), d1(d1)
+{
 	mark_assigned_rides();
 }
 
-void tweak_solution::tweak(){
-	get_random_rides();
-	replace_ride_with_unassigned();
+bool tweak_solution::tweak(){
+	if(!unassigned_rides.empty()){
+		get_random_rides();
+		replace_ride_with_unassigned();
+		return true;
+	}
+	return false;
 }
 
 void tweak_solution::get_random_rides(){
 	random_vehicle = rand() % fleets.size();
-	cout<<"random_vehicle "<<random_vehicle<<endl;
-	random_ride = fleets.at(random_vehicle).at( rand() % (fleets.at(random_vehicle).size() - 1));
-	cout<<"random_ride "<<random_ride<<endl;
+	random_ride_fleets_index = rand() % (fleets.at(random_vehicle).size() - 1);
+	random_ride = fleets.at(random_vehicle).at( random_ride_fleets_index );
 
 	ride* ride_to_check = get_ride (random_ride).close_next_rides.at (rand() % no_close_next_rides);
 
 	if(!ride_to_check->assigned){
-		cout<<"Not assigned\n";
 		random_new_ride = get_ride_index (ride_to_check);
 	}	else	{
-		cout<<"Assigned!\n";
-		random_new_ride = unassigned_rides.at (rand() % unassigned_rides.size() - 1);
+		random_new_ride = unassigned_rides.at (rand() % unassigned_rides.size());
 	}
-	cout<<"attempted_replacement "<<attempted_replacement<<endl;
-	cout <<"random_new_ride "<< random_new_ride<<endl;
 }
 
 void tweak_solution::replace_ride_with_unassigned(){
-	cout << "1\n";
-	latest_removal = fleets.at (random_vehicle).at (random_ride+1);
-	cout << "2\n";
-	cout<<"latest_removal "<<latest_removal<<endl;
+	ride_to_remove = fleets.at (random_vehicle).at (random_ride_fleets_index + 1);
 	attempted_replacement = random_new_ride;
-	cout << "3\n";
-	cout << "attempted_replacement "<<attempted_replacement<<endl;
-	fleets.at (random_vehicle).at (random_ride+1) = attempted_replacement;
-	cout<<"4\n";
+	fleets.at (random_vehicle).at (random_ride_fleets_index + 1) = attempted_replacement;
 }
 
 //IF TWEAK DIDN'T YIELD A BETTER SOLUTION
-void tweak_solution::undo_replace(){
-	fleets.at(random_vehicle).at(random_ride+1) = latest_removal;
+void tweak_solution::undo_tweak(){
+	undo_replace_ride_with_unassigned();
+}
+
+void tweak_solution::undo_replace_ride_with_unassigned(){
+	fleets.at(random_vehicle).at(random_ride_fleets_index + 1) = ride_to_remove;
 }
 
 void tweak_solution::keep_replace(){
-	unassigned_rides.push_back (latest_removal);
+	unassigned_rides.push_back (ride_to_remove);
 	unassigned_rides.erase (find (unassigned_rides.begin(), unassigned_rides.end(), attempted_replacement));
 
-	get_ride (latest_removal).assigned = false;
+	get_ride (ride_to_remove).assigned = false;
 	get_ride (attempted_replacement).assigned = true;
 }
 

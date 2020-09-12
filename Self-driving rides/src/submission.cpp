@@ -13,9 +13,8 @@
 
 using namespace std;
 
-submission::submission(const unordered_map<int, vector<int>>& fleets){
-	this->fleets = fleets;
-}
+submission::submission(const unordered_map<int, vector<int>>& fleets)
+	: fleets(fleets){}
 
 void submission::output_solution() {
 	ofstream csv_file(solution_path);

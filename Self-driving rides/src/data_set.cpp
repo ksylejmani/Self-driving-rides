@@ -13,8 +13,9 @@
 
 data_set::data_set(){}
 
-data_set::data_set(string instance_path) {
-	instance = instance_path;
+data_set::data_set(string instance_path)
+	: instance(instance_path)
+ {
 	Timing t("data_set");
 	// Read and place the data from the file in the respective variables and arrays  
 	read_instance_file(instance);

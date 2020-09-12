@@ -16,9 +16,8 @@ struct ride {
 	bool assigned;
 	
 	ride() {	}
-	ride (int _a, int _b, int _x, int _y, int _s, int _f) {
-		a = _a; b = _b; x = _x; y = _y; s = _s; f = _f;
-	}
+	ride (int _a, int _b, int _x, int _y, int _s, int _f)
+		: a(_a), b(_b), x(_x), y(_y), s(_s), f(_f)	{}
 };
 
 #endif
