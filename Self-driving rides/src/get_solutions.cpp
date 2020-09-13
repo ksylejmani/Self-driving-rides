@@ -16,6 +16,7 @@ unordered_map<int, vector<int>> get_initial_solution_variant_1(const data_set& d
 	// Variant 1 - Fully random, to be done by Enes
 	unordered_map<int, vector<int>> result;
 	vector<int>* vehicles = new vector<int>[ds.F];
+	srand(time(NULL));
 	list<int> assigned_rides;
 	//counters count the number of rides we assign to a car
 	vector <int> Counters(ds.F, 0);
@@ -24,12 +25,14 @@ unordered_map<int, vector<int>> get_initial_solution_variant_1(const data_set& d
 		unassigned_rides_variant_1.push_back(i);
 	}
 	random_shuffle(unassigned_rides_variant_1.begin(), unassigned_rides_variant_1.end());
-	for (int i = 0; i < ds.F; i++){
+	for (int i = 0; i < ds.F; i++)
+	{
 		int time_left = ds.T;
 		//list of the rides that are unaffordable for the car i
 		vector <int> unaffordable_rides;
 		//while there is some time left, do ...
-		while (time_left > initial_solution_time_left_margin * ds.T){
+		while (time_left > initial_solution_time_left_margin * ds.T)
+		{
 			int random_ride = unassigned_rides_variant_1.back();
 			unassigned_rides_variant_1.pop_back();
 			//earliest_time is the number of steps that has passed by the time vehicle starts riding at the starting intersection , we firstly say that it is equal to the earliest start
@@ -41,15 +44,18 @@ unordered_map<int, vector<int>> get_initial_solution_variant_1(const data_set& d
 					earliest_time = ds.rides.at(random_ride)->a + ds.rides.at(random_ride)->b;
 			}
 			//if this isn't the first ride for vehicle i
-			else{
+			else
+			{
 				//distance_last_first is the distance from the last intersection of the previous ride to the begining of the start intersection of the current ride
 				int distance_last_first = abs(ds.rides.at(random_ride)->a - ds.rides.at(assigned_rides.back())->x) + abs(ds.rides.at(random_ride)->b - ds.rides.at(assigned_rides.back())->y);
 				if (ds.rides.at(random_ride)->s < ds.T - time_left + distance_last_first)
 					earliest_time = ds.T - time_left + distance_last_first;
 			}
+
 			int distance_between_intersections = abs(ds.rides.at(random_ride)->a - ds.rides.at(random_ride)->x) + abs(ds.rides.at(random_ride)->b - ds.rides.at(random_ride)->y);
 			//if the ride ended before or in the latest step , do ...
-			if (earliest_time + distance_between_intersections <= ds.rides.at(random_ride)->f){
+			if (earliest_time + distance_between_intersections <= ds.rides.at(random_ride)->f)
+			{
 				assigned_rides.push_back(random_ride);
 				vehicles[i].push_back(random_ride);
 				time_left = ds.T - (earliest_time + distance_between_intersections);
@@ -61,7 +67,8 @@ unordered_map<int, vector<int>> get_initial_solution_variant_1(const data_set& d
 				}
 			}
 			//if the ride didn't end before or in the last step (it's unaffordable for car i) , do ...
-			else{
+			else
+			{
 				unaffordable_rides.push_back(random_ride);
 				//if all rides are unaffordable (pretty sure that this condition never gets true , put it for the sake of safeness) , or we have checked all rides , break .
 				if ((unaffordable_rides.size() == ds.N - assigned_rides.size()) || (unaffordable_rides.size() == ds.N)) {
@@ -70,13 +77,15 @@ unordered_map<int, vector<int>> get_initial_solution_variant_1(const data_set& d
 				}
 			}
 			//Test your solution in the main function
+
 		}
 		vehicles[i].insert(vehicles[i].begin(), Counters.at(i));
 		result.insert(pair<int, vector<int>>(i, vehicles[i]));
 		//if all rides are assigned for the cars up to i , do
 		if (assigned_rides.size() == ds.N) {
 			//if this isn't the last car left
-			if (i != ds.F - 1){
+			if (i != ds.F - 1)
+			{
 				//assign the rest of the cars 0 rides
 				for (int j = i + 1; j < ds.F; j++) {
 					vehicles[j].push_back(0);

@@ -14,24 +14,25 @@
 #include "../include/some_functions_h.h"
 using namespace std;
 
-ofstream debug("debug.txt");
-oteestream    tee(debug, cout);
-
 void stochastic_hill_climbing(unordered_map<int, vector<int>>& fleets, vector<int>& unassigned_rides, data_set& d1){
 	tweak_solution stochastic(fleets, unassigned_rides, d1);
-	
+	cout<<"stochastic\n";
     int score = get_score(d1, fleets);
-    for(int i = 1; i< d1.N; i++){
+    cout<<"Score\n";
+    for(int i = 1; i< 10000; i++){
     	//what is the highest possible score?
 
-	    if(!stochastic.tweak())
+	    if(!stochastic.tweak()){
 	    	break;
-	    
+	    }
+		cout<< "Vehicle "<<stochastic.random_vehicle <<" ride_fleets_index "<<stochastic.random_ride_fleets_index <<" ride "
+			<< stochastic.random_ride <<" random new ride "<< stochastic.random_new_ride<<endl;
+	    	
 		int c_score = get_score(d1, fleets);
-		cout<<"Score after tweeak: "<<c_score<<endl;
 		if(c_score > score){
 			stochastic.keep_replace();
-			tee << "Success! Iteration nr : " << i << "==========\n";
+			cout<<"Score after tweeak: "<<c_score<<endl;
+			cout << "Success! Iteration nr : " << i << "==========\n";
 			score = c_score;
 		}
 		else{
@@ -48,6 +49,7 @@ tweak_solution::tweak_solution(unordered_map<int, vector<int>>& fleets, vector<i
 
 bool tweak_solution::tweak(){
 	if(!unassigned_rides.empty()){
+		cout<<"Not empty\n";
 		if(!successful_tweak)
 		{
 			 get_random_rides();
@@ -58,13 +60,18 @@ bool tweak_solution::tweak(){
 		}
 		replace_ride_with_unassigned();
 		return true;
+	} 
+	else {
+		cout<<"false";
+		return false;
 	}
-	return false;
 }
 
 void tweak_solution::get_random_rides(){
 	random_vehicle = rand() % fleets.size();
-	random_ride_fleets_index = rand() % (fleets.at(random_vehicle).size() - 1);
+	cout<<"random_vehicle "<<random_vehicle<<endl;
+	random_ride_fleets_index = (fleets.at(random_vehicle).size() >= 2) ? ((rand() % (fleets.at(random_vehicle).size() - 2)) + 1) : 1;
+	cout<<"random_ride_fleets_index "<<random_ride_fleets_index<<endl;
 	get_replacements(random_vehicle, random_ride_fleets_index);
 }
 
@@ -79,12 +86,10 @@ void tweak_solution::get_replacements(size_t random_vehicle, size_t random_ride_
 	{
 		random_new_ride = unassigned_rides.at (rand() % unassigned_rides.size());
 	}
-	cout<< "Vehicle "<<random_vehicle <<" ride_fleets_index "<<random_ride_fleets_index <<" ride "
-		<<random_ride <<" random new ride "<<random_new_ride<<endl;
 }
 
 void tweak_solution::replace_ride_with_unassigned(){
-	if(random_ride_fleets_index < fleets.at( random_vehicle).size()){
+	if(random_ride_fleets_index < fleets.at( random_vehicle).size() - 2){
 		ride_to_remove = fleets.at (random_vehicle).at (random_ride_fleets_index + 1);
 		attempted_replacement = random_new_ride;		
 		fleets.at (random_vehicle).at (random_ride_fleets_index + 1) = attempted_replacement;
@@ -114,21 +119,26 @@ void tweak_solution::undo_replace_ride_with_unassigned(){
 }
 
 void tweak_solution::keep_replace(){
-	if(ride_to_remove != -1){	unassigned_rides.push_back(ride_to_remove);	}
+	if(ride_to_remove != -1)
+	{
+		unassigned_rides.push_back(ride_to_remove);
+	}
 	unassigned_rides.erase (find (unassigned_rides.begin(), unassigned_rides.end(), attempted_replacement));
 
-	if(ride_to_remove != -1){	get_ride (ride_to_remove).assigned = false;	}
+	if(ride_to_remove != -1){
+		get_ride (ride_to_remove).assigned = false;
+	}
 	get_ride (attempted_replacement).assigned = true;
 
-	successful_tweak = true;
 	random_ride_fleets_index++;
+	successful_tweak = true;
 }
 
 //HELPER FUNCTIONS
 void tweak_solution::mark_assigned_rides(){
 	for(auto vehicle : fleets ){
-		for(auto ride : vehicle.second){
-			get_ride(ride).assigned = true;
+		for(auto ride =  vehicle.second.begin() + 1; ride != vehicle.second.end(); ride++){
+			get_ride(*ride).assigned = true;
 		}
 	}
 }
@@ -137,4 +147,10 @@ int tweak_solution::get_ride_index(ride* ride){
 }
 ride& tweak_solution::get_ride(int ride_index){
 	return *(d1.rides.at(ride_index));
+}
+
+void tweak_solution::restate_number_of_rides_per_vehicle(){
+	for(auto vehicle =  fleets.begin(); vehicle != fleets.end(); vehicle++){
+		vehicle->second[0] =  vehicle->second.size() -1;
+	}
 }

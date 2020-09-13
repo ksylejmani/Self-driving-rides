@@ -1,13 +1,9 @@
 #include <vector>
-#include <utility>
 #include <unordered_map>
 #include <sstream>
 #include <fstream>
-#include <chrono>
-#include <ctime>
 
 #include "../include/submission_h.h"
-#include "../include/get_solutions_h.h"
 #include "../include/global_variables_h.h"
 
 using namespace std;
