@@ -4,7 +4,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include "data_set_h.h"
+struct data_set;
+
+using namespace std;
 
 extern vector<int> unassigned_rides_variant_1;
 unordered_map<int, vector<int>> get_initial_solution_variant_1 (const data_set&);

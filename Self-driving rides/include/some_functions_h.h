@@ -2,10 +2,11 @@
 #define SOME_FUNCTIONS_H
 
 #include <unordered_map>
-#include <vector>
 #include <string>
+#include <iostream>
+#include <fstream>
 
-#include "../include/data_set_h.h"
+struct data_set;
 
 using namespace std;
 

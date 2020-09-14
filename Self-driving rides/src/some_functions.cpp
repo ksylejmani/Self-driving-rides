@@ -11,9 +11,9 @@
 #include "../include/some_functions_h.h"
 #include "../include/data_set_h.h"
 #include "../include/global_variables_h.h"
+#include "../include/ride_h.h"
 
 using namespace std;
-
 
 vector<int> split_string_to_ints(string line) {
 	stringstream ss_line(line);
@@ -29,7 +29,7 @@ unordered_map<int, vector<int>> read_solution_file(){
 	ifstream wf(solution_path);
 	if (wf.is_open()) {
 		string line;
-		int line_number = 1;   // INITIAL VALUE
+		int line_number = 0;   // INITIAL VALUE
 		while (getline(wf, line)){
 			fleets.insert(make_pair(line_number++, split_string_to_ints(line)));
 		}
@@ -42,9 +42,7 @@ unordered_map<int, vector<int>> read_solution_file(){
 	return fleets;
 }
 
-
 int get_score(const data_set& ds, unordered_map<int, vector<int>> fleets) {// To be done by Erlis
-
 	int result = 0; // Contains the score of all vehicles combined including bonuses
 	/*
 	We assume that each ride is assigned to a vehicle only once
@@ -92,6 +90,7 @@ int get_score(const data_set& ds, unordered_map<int, vector<int>> fleets) {// To
 		}
 		result += vehicle_score;
 	}
+
 	// Test your function by using both solutions of Enes and Lendrit
 	return result;
 }

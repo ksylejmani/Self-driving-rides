@@ -1,22 +1,21 @@
-#include <vector>
-#include <unordered_map>
 #include <list>
 #include <chrono>
 #include <ctime>
 #include <algorithm>
 
-#include "../include/global_variables_h.h"
 #include "../include/get_solutions_h.h"
 #include "../include/data_set_h.h"
+#include "../include/some_functions_h.h"
+#include "../include/ride_h.h"
 
 using namespace std;
 
-vector<int> unassigned_rides_variant_1(10);	//Unimportant size
+vector<int> unassigned_rides_variant_1;	//Unimportant size
 
 unordered_map<int, vector<int>> get_initial_solution_variant_1(const data_set& ds) {
 	// Variant 1 - Fully random, to be done by Enes
 	unordered_map<int, vector<int>> result;
-	vector<int>* vehicles = new vector<int>[ds.F];
+	vector<vector<int> > vehicles(ds.F);
 	srand(time(NULL));
 	list<int> assigned_rides;
 	//counters count the number of rides we assign to a car
@@ -99,27 +98,28 @@ unordered_map<int, vector<int>> get_initial_solution_variant_1(const data_set& d
 	return result;
 }
 
-unordered_map<int, vector<int>> get_initial_solution_variant_2(const data_set& ds) {
-	// Variant 2 - Smart random, to be done by Lendrit
-	unordered_map<int, vector<int>> result;
-	//Implementation goes here ...
-	//Test your solution in the main function
-	return result;
-}
+// unordered_map<int, vector<int>> get_initial_solution_variant_2(const data_set& ds) {
+// 	// Variant 2 - Smart random, to be done by Lendrit
+// 	unordered_map<int, vector<int>> result;
+// 	//Implementation goes here ...
+// 	//Test your solution in the main function
+// 	return result;
+// }
 
-unordered_map<int, vector<int>> get_greedy_local_search_solution(const data_set& ds) {
-	unordered_map<int, vector<int>> d;
-	// d= get_initial_solution();// Variant 1 - Fully random, to be done by Enes
-								 // Variant 2 - Smart random, to be done by Lendrit
-	// d_quality= get_socore(ds,e);
-	int i = 1;
-	//while (i <= no_iterations) {
-		// N= get_neighborhood();
-		// e= choose_neighbour(N);
-		// e_quality=get_socore(ds,e);
-		// if(e_quality>d_quality)
-				//d = e;
-		//i++;
-	//}
-	return d;
-}
+// unordered_map<int, vector<int>> get_greedy_local_search_solution(const data_set& ds) {
+// 	unordered_map<int, vector<int>> d;
+// 	// d= get_initial_solution();// Variant 1 - Fully random, to be done by Enes
+// 								 // Variant 2 - Smart random, to be done by Lendrit
+// 	// d_quality= get_socore(ds,e);
+// 	int i = 1;
+// 	//while (i <= no_iterations) {
+// 		// N= get_neighborhood();
+// 		// e= choose_neighbour(N);
+// 		// e_quality=get_socore(ds,e);
+// 		// if(e_quality>d_quality)
+// 				//d = e;
+// 		//i++;
+// 	//}
+// 	return d;
+// }
+
