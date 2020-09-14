@@ -8,6 +8,6 @@ const int difference_latest_finish_time = 5;
 const double initial_solution_time_left_margin=0.1;
 const double score_satisfactory_coefficient = 0.5;
 
-string instance_name = "a_example";
+string instance_name = "c_no_hurry";
 string instance_path = "dataset/" + instance_name + ".in";
 string solution_path = "solution/" + instance_name + ".out";

@@ -10,35 +10,28 @@
 
 #include "../include/hill_climbing_h.h"
 #include "../include/ride_h.h"
-#include "../include/dual_output_h.h"
 #include "../include/some_functions_h.h"
 using namespace std;
 
 void stochastic_hill_climbing(unordered_map<int, vector<int>>& fleets, vector<int>& unassigned_rides, data_set& d1){
 	tweak_solution stochastic(fleets, unassigned_rides, d1);
-	cout<<"stochastic\n";
     int score = get_score(d1, fleets);
-    cout<<"Score\n";
     for(int i = 1; i< 10000; i++){
     	//what is the highest possible score?
 
 	    if(!stochastic.tweak()){
 	    	break;
 	    }
-		cout<< "Vehicle "<<stochastic.random_vehicle <<" ride_fleets_index "<<stochastic.random_ride_fleets_index <<" ride "
-			<< stochastic.random_ride <<" random new ride "<< stochastic.random_new_ride<<endl;
-	    	
 		int c_score = get_score(d1, fleets);
 		if(c_score > score){
-			stochastic.keep_replace();
-			cout<<"Score after tweeak: "<<c_score<<endl;
-			cout << "Success! Iteration nr : " << i << "==========\n";
+			stochastic.keep_tweak();
 			score = c_score;
 		}
 		else{
 			stochastic.undo_tweak();
 		}
     }
+    stochastic.fix_number_of_rides_per_vehicle();
 }
 
 tweak_solution::tweak_solution(unordered_map<int, vector<int>>& fleets, vector<int>& unassigned_rides, data_set& d1)
@@ -49,33 +42,38 @@ tweak_solution::tweak_solution(unordered_map<int, vector<int>>& fleets, vector<i
 
 bool tweak_solution::tweak(){
 	if(!unassigned_rides.empty()){
-		cout<<"Not empty\n";
 		if(!successful_tweak)
 		{
-			 get_random_rides();
+			get_random_rides();
 		}
-		else
-		{
-			get_replacements(random_vehicle, random_ride_fleets_index);
-		}
+
+		get_replacements();
 		replace_ride_with_unassigned();
 		return true;
 	} 
 	else {
-		cout<<"false";
 		return false;
 	}
 }
 
 void tweak_solution::get_random_rides(){
-	random_vehicle = rand() % fleets.size();
-	cout<<"random_vehicle "<<random_vehicle<<endl;
-	random_ride_fleets_index = (fleets.at(random_vehicle).size() >= 2) ? ((rand() % (fleets.at(random_vehicle).size() - 2)) + 1) : 1;
-	cout<<"random_ride_fleets_index "<<random_ride_fleets_index<<endl;
-	get_replacements(random_vehicle, random_ride_fleets_index);
+	random_vehicle = (rand() % fleets.size() - 1) + 1;
+	while(fleets.at(random_vehicle).size() == 1)
+	{
+		random_vehicle = (rand() % fleets.size() - 1) + 1;
+	}
+	
+	if(fleets.at(random_vehicle).size() >= 4)
+	{
+	random_ride_fleets_index = (rand() % (fleets.at(random_vehicle).size() - 2)) + 1;
+	} 
+	else
+	{
+		random_ride_fleets_index = 1;
+	}
 }
 
-void tweak_solution::get_replacements(size_t random_vehicle, size_t random_ride_fleets_index){
+void tweak_solution::get_replacements(){
 	random_ride = fleets.at(random_vehicle).at( random_ride_fleets_index );
 	ride* ride_to_check = get_ride (random_ride).close_next_rides.at (rand() % no_close_next_rides);
 	if(!ride_to_check->assigned)
@@ -118,6 +116,11 @@ void tweak_solution::undo_replace_ride_with_unassigned(){
 	successful_tweak = false;
 }
 
+//IF TWEAK YIELDED A BETTER SOLTUION
+void tweak_solution::keep_tweak(){
+	keep_replace();
+}
+
 void tweak_solution::keep_replace(){
 	if(ride_to_remove != -1)
 	{
@@ -149,7 +152,7 @@ ride& tweak_solution::get_ride(int ride_index){
 	return *(d1.rides.at(ride_index));
 }
 
-void tweak_solution::restate_number_of_rides_per_vehicle(){
+void tweak_solution::fix_number_of_rides_per_vehicle(){
 	for(auto vehicle =  fleets.begin(); vehicle != fleets.end(); vehicle++){
 		vehicle->second[0] =  vehicle->second.size() -1;
 	}

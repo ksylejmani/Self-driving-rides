@@ -8,11 +8,11 @@
 
 using namespace std;
 
-submission::submission(const unordered_map<int, vector<int>>& fleets)
-	: fleets(fleets){}
+submission::submission(const unordered_map<int, vector<int>>& fleets, string solution)
+	: fleets(fleets), solution(solution){}
 
 void submission::output_solution() {
-	ofstream csv_file(solution_path);
+	ofstream csv_file(solution);
 	for (unordered_map<int, vector<int>>::iterator itr = fleets.begin(); itr != fleets.end(); itr++){
 		
 		int j = 0;

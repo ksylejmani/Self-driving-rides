@@ -12,8 +12,8 @@
 
 data_set::data_set(){}
 
-data_set::data_set(string instance_path)
-	: instance(instance_path)
+data_set::data_set(string instance)
+	: instance(instance)
  {
 	read_instance_file();
 	rides.shrink_to_fit();
@@ -41,11 +41,11 @@ void data_set::process_ride_lines(string ride_line) {
 void data_set::read_instance_file() {
 	ifstream wf(instance);
 	if (wf.is_open()) {
-		//read first line of instance_name
+		//read first line of instance
 		string first_line;
 		getline(wf, first_line);
 		process_first_line(first_line);
-		//read the rest of instance_name lines
+		//read the rest of instance lines
 		string ride_line;
 		while (getline(wf, ride_line)) {
 			process_ride_lines(ride_line);

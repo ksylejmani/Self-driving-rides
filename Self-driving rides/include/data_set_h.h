@@ -12,6 +12,7 @@ struct data_set {
 	int 			R, C, F, N, B, T;
 	vector<ride*>	rides;
 	string 			instance;
+	
 	data_set();
 	data_set(string);
 

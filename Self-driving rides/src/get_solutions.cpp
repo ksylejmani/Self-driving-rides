@@ -10,12 +10,12 @@
 
 using namespace std;
 
-vector<int> unassigned_rides_variant_1(10);	//Unimportant size
+vector<int> unassigned_rides_variant_1;	//Unimportant size
 
 unordered_map<int, vector<int>> get_initial_solution_variant_1(const data_set& ds) {
 	// Variant 1 - Fully random, to be done by Enes
 	unordered_map<int, vector<int>> result;
-	vector<int>* vehicles = new vector<int>[ds.F];
+	vector<vector<int> > vehicles(ds.F);
 	srand(time(NULL));
 	list<int> assigned_rides;
 	//counters count the number of rides we assign to a car
@@ -95,7 +95,6 @@ unordered_map<int, vector<int>> get_initial_solution_variant_1(const data_set& d
 			break;
 		}
 	}
-	delete vehicles;
 	return result;
 }
 
