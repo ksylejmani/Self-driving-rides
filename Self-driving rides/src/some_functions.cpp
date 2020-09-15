@@ -42,7 +42,7 @@ unordered_map<int, vector<int>> read_solution_file(){
 	return fleets;
 }
 
-int get_score(const data_set& ds, unordered_map<int, vector<int>> fleets) {// To be done by Erlis
+int get_score(const data_set& ds,const unordered_map<int, vector<int>>& fleets) {// To be done by Erlis
 	int result = 0; // Contains the score of all vehicles combined including bonuses
 	/*
 	We assume that each ride is assigned to a vehicle only once
@@ -94,3 +94,39 @@ int get_score(const data_set& ds, unordered_map<int, vector<int>> fleets) {// To
 	// Test your function by using both solutions of Enes and Lendrit
 	return result;
 }
+int get_score_for_one_vehicle(const data_set& ds,const vector<int>& scoring_vehicle) {
+		int score = 0;
+		if (scoring_vehicle.size()==1)
+			return score;
+		int time_passed = 0;
+		int distance_from_zero_intersection = ds.rides.at(scoring_vehicle[1])->a + ds.rides.at(scoring_vehicle[1])->b;
+		for (int i = 1; i < scoring_vehicle.size(); i++)
+		{
+			int distance_between_intersections = 0;
+			int distance_last_first = 0;
+			distance_between_intersections = abs(ds.rides.at(scoring_vehicle[i])->a - ds.rides.at(scoring_vehicle[i])->x) + abs(ds.rides.at(scoring_vehicle[i])->b - ds.rides.at(scoring_vehicle[i])->y);
+			if (i == 1)
+			{
+				score += distance_between_intersections;
+				if (ds.rides.at(scoring_vehicle[i])->s >= distance_from_zero_intersection) {
+					time_passed = ds.rides.at(scoring_vehicle[i])->s;
+					score += ds.B;
+					time_passed += distance_between_intersections;
+					continue;
+				}
+				time_passed += distance_between_intersections+ distance_from_zero_intersection;
+				continue;
+			}
+			distance_last_first = abs(ds.rides.at(scoring_vehicle[i])->a - ds.rides.at(scoring_vehicle[i - 1])->x) + abs(ds.rides.at(scoring_vehicle[i])->b - ds.rides.at(scoring_vehicle[i - 1])->y);
+			time_passed += distance_last_first ; 
+			score += distance_between_intersections; 
+			if (ds.rides.at(scoring_vehicle[i])->s >= time_passed) {
+				time_passed = ds.rides.at(scoring_vehicle[i])->s;
+				time_passed += distance_between_intersections;
+				score += ds.B;
+				continue;
+			}
+			time_passed += distance_between_intersections;
+		}
+		return score;
+	}
