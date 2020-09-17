@@ -35,6 +35,15 @@ unordered_map<int, vector<int>> get_initial_solution_variant_1(const data_set& d
 		{
 			int random_ride = unassigned_rides_variant_1.back();
 			unassigned_rides_variant_1.pop_back();
+			//if time passed is greater than or equal to latest finish this ride is unaffordable for this car
+			if (ds.T - time_left >= ds.rides.at(random_ride)->f) {
+				unaffordable_rides.push_back(random_ride);
+				if ((unaffordable_rides.size() == ds.N - assigned_rides.size()) || (unaffordable_rides.size() == ds.N)) {
+					unassigned_rides.insert(unassigned_rides.end(), unaffordable_rides.begin(), unaffordable_rides.end());
+					break;
+				}
+				continue;
+			}
 			//earliest_time is the number of steps that has passed by the time vehicle starts riding at the starting intersection , we firstly say that it is equal to the earliest start
 			int earliest_time = ds.rides.at(random_ride)->s;
 
