@@ -42,7 +42,13 @@ unordered_map<int, vector<int>> read_solution_file(){
 	return fleets;
 }
 
+// unordered_map<ride_index, pair<ride_score, starting_time>>
+unordered_map<int, pair<int, int>> ride_info;
+// unordered_map<vehicle_index, vehicle_score>
+unordered_map<int, int> vehicle_scores;
+
 int get_score(const data_set& ds,const unordered_map<int, vector<int>>& fleets) {// To be done by Erlis
+
 	int result = 0; // Contains the score of all vehicles combined including bonuses
 	/*
 	We assume that each ride is assigned to a vehicle only once
@@ -53,47 +59,166 @@ int get_score(const data_set& ds,const unordered_map<int, vector<int>>& fleets) 
 
 	for (auto it = fleets.begin(); it != fleets.end(); it++) // Iterate for each vehicle
 	{
+		int vehicle_index = it->first;
 		int vehicle_score = 0; // Contains the score of the current vehicle
 		pair<int, int> position(0, 0); // Starting position of each vehicle
 		int step = 0; // The starting step for each vehicle
 
-		for (int j = 1; j < it->second.size(); j++) // Iterate for each ride of the current vehicle
+		for (int i = 1; i < it->second.size(); i++) // Iterate for each ride of the current vehicle
 		{
 			int ride_score = 0; // Contains the score of the current ride
-			int nr_of_current_ride = it->second[j];
-			ride* current_ride = ds.rides[nr_of_current_ride];
+			int ride_index = it->second[i];
+			ride* current_ride = ds.rides[ride_index];
 
-			int a = current_ride->a;	int b = current_ride->b;
-			int x = current_ride->x;	int y = current_ride->y;
-			int earliest_start = current_ride->s;	int latest_finish = current_ride->f;
+			int a = current_ride->a;	int x = current_ride->x;	int earliest_start = current_ride->s;
+			int b = current_ride->b;	int y = current_ride->y;	int latest_finish = current_ride->f;
 
 			int distance_from_position_to_start = abs(a - position.first) + abs(b - position.second); // Distance from current position to the start intersection of the ride
+			step += distance_from_position_to_start;
+
+			if (step < earliest_start) // Including the waiting time until the earliest start
+				step = earliest_start;
+
+			int starting_time = step;
+
 			int distance_from_start_to_finish = abs(x - a) + abs(y - b); // Distance from the start intersection to the finish intersection of the ride
+			step += distance_from_start_to_finish;
 
-			int distance_from_position_to_finish = distance_from_position_to_start + distance_from_start_to_finish; // The distance which the vehicle travels
-			if(step + distance_from_position_to_start < earliest_start) // Including the waiting time until the earliest start
-				distance_from_position_to_finish += earliest_start - (step + distance_from_position_to_start);
-
-			step += distance_from_position_to_finish;
-			if (step > latest_finish)
-				goto fundi;
-			else {
+			if (step <= latest_finish) {
 				ride_score += distance_from_start_to_finish;
-				if((step - distance_from_start_to_finish) == earliest_start)
+				if ((step - distance_from_start_to_finish) == earliest_start)
 					ride_score += bonus;
 			}
 
 			position = make_pair(x, y); // At the end of the ride the vehicle is located at the finish intersection
 
-		fundi:
-			vehicle_score += ride_score;
+			if (step <= ds.T) {
+				ride_info[ride_index] = make_pair(ride_score, starting_time);
+				vehicle_score += ride_score;
+			}
+			else {
+				for (int j = i; j < it->second.size(); j++) {
+					ride_index = it->second[j];
+					ride_info[ride_index] = make_pair(0, -1);
+				}
+				break;
+			}
 		}
+		vehicle_scores[vehicle_index] = vehicle_score;
 		result += vehicle_score;
 	}
-
 	// Test your function by using both solutions of Enes and Lendrit
 	return result;
 }
+
+int score_from_rides() {
+	int score = 0;
+	for (auto it = ride_info.begin(); it != ride_info.end(); it++) {
+		int ride_score = it->second.first;
+		score += ride_score;
+	}
+	return score;
+}
+
+int score_from_vehicles() {
+	int score = 0;
+	for (auto it = vehicle_scores.begin(); it != vehicle_scores.end(); it++) {
+		int vehicle_score = it->second;
+		score += vehicle_score;
+	}
+	return score;
+}
+
+// Delta get_score
+// Calculates the difference of score if only one ride is changed
+int get_score(const data_set& ds, const unordered_map<int, vector<int>>& fleets, const int& previous_score, const int& vehicle_index, const int& previous_ride, const int& new_ride) {
+	int bonus = ds.B;
+	int time_left = ds.T;
+
+	int vehicle_score = 0; // Contains the score of the vehicle
+	pair<int, int> position(0, 0); // Starting position of the vehicle
+	int step = 0; // The starting step for each vehicle
+
+	for (int j = 1; j < fleets.at(vehicle_index).size(); j++) // Iterate for each ride of the vehicle
+	{
+		int ride_score = 0; // Contains the score of the current ride
+		int nr_of_current_ride = fleets.at(vehicle_index)[j];
+		ride* current_ride = ds.rides[nr_of_current_ride];
+
+		int a = current_ride->a;	int x = current_ride->x;	int earliest_start = current_ride->s;
+		int b = current_ride->b;	int y = current_ride->y;	int latest_finish = current_ride->f;
+
+		int distance_from_position_to_start = abs(a - position.first) + abs(b - position.second); // Distance from current position to the start intersection of the ride
+		step += distance_from_position_to_start;
+
+		if (step < earliest_start) // Including the waiting time until the earliest start
+			step = earliest_start;
+
+		int distance_from_start_to_finish = abs(x - a) + abs(y - b); // Distance from the start intersection to the finish intersection of the ride
+		step += distance_from_start_to_finish;
+
+		if (step <= latest_finish) {
+			ride_score += distance_from_start_to_finish;
+			if ((step - distance_from_start_to_finish) == earliest_start)
+				ride_score += bonus;
+		}
+
+		position = make_pair(x, y); // At the end of the ride the vehicle is located at the finish intersection
+
+		if (step <= ds.T) {
+			vehicle_score += ride_score;
+		}
+		else
+			break;
+	}
+
+	int new_score = previous_score - vehicle_score;
+
+	int new_vehicle_score = 0;
+	position = make_pair(0, 0);
+	step = 0;
+	for (int j = 1; j < fleets.at(vehicle_index).size(); j++) // Iterate for each ride of the current vehicle
+	{
+		int ride_score = 0; // Contains the score of the current ride
+		int nr_of_current_ride = fleets.at(vehicle_index)[j];
+		ride* current_ride;
+		if (nr_of_current_ride == previous_ride)
+			current_ride = ds.rides[new_ride];
+		else
+			current_ride = ds.rides[nr_of_current_ride];
+
+		int a = current_ride->a;	int x = current_ride->x;	int earliest_start = current_ride->s;
+		int b = current_ride->b;	int y = current_ride->y;	int latest_finish = current_ride->f;
+
+		int distance_from_position_to_start = abs(a - position.first) + abs(b - position.second); // Distance from current position to the start intersection of the ride
+		step += distance_from_position_to_start;
+
+		if (step < earliest_start) // Including the waiting time until the earliest start
+			step = earliest_start;
+
+		int distance_from_start_to_finish = abs(x - a) + abs(y - b); // Distance from the start intersection to the finish intersection of the ride
+		step += distance_from_start_to_finish;
+
+		if (step <= latest_finish) {
+			ride_score += distance_from_start_to_finish;
+			if ((step - distance_from_start_to_finish) == earliest_start)
+				ride_score += bonus;
+		}
+
+		position = make_pair(x, y); // At the end of the ride the vehicle is located at the finish intersection
+
+		if (step <= ds.T) {
+			new_vehicle_score += ride_score;
+		}
+		else
+			break;
+	}
+
+	new_score += new_vehicle_score;
+
+	return new_score;
+}
+
 int get_score_for_one_vehicle(const data_set& ds,const vector<int>& scoring_vehicle) {
 		int score = 0;
 		if (scoring_vehicle.size()==1)

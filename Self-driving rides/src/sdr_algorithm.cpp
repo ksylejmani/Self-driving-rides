@@ -35,6 +35,7 @@ int main() {
 
 	submission hill_climbing(fleets, solution_path);
 	hill_climbing.output_solution();
-
+	
+	system("pause");
 	return 0;
 }

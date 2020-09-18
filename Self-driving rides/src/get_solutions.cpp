@@ -39,7 +39,7 @@ unordered_map<int, vector<int>> get_initial_solution_variant_1(const data_set& d
 			if (ds.T - time_left >= ds.rides.at(random_ride)->f) {
 				unaffordable_rides.push_back(random_ride);
 				if ((unaffordable_rides.size() == ds.N - assigned_rides.size()) || (unaffordable_rides.size() == ds.N)) {
-					unassigned_rides.insert(unassigned_rides.end(), unaffordable_rides.begin(), unaffordable_rides.end());
+					unassigned_rides_variant_1.insert(unassigned_rides_variant_1.end(), unaffordable_rides.begin(), unaffordable_rides.end());
 					break;
 				}
 				continue;
