@@ -21,7 +21,7 @@ int main() {
 	unordered_map<int, vector<int>> fleets;
 
 	// cout<<"\nExistent solution file:\n";
-	// fleets = read_solution_file();
+	// fleets = read_solution_file();	// Causes error in score_from_rides() and score_from_vehicles()
 	// int score = get_score(d1, fleets);
 	// cout << "Score: " << score << endl;
 
