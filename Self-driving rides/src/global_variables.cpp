@@ -1,6 +1,6 @@
 #include "../include/global_variables_h.h"
 
-const int no_iterations = 100;
+const int no_iterations = 10000;
 const int no_close_next_rides = 4;
 const int no_replace_next_rides =3;
 const int difference_earliest_start_time = 5;
