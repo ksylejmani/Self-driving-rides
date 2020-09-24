@@ -84,7 +84,7 @@ ride* data_set::find_close_ride(ride* given_ride) {
 }
 void data_set::find_k_closest_rides(ride* given_ride) {
 	//min(K, N - 1) in case K is bigger than the number of rides
-	int number_of_close_next_rides = min(no_close_next_rides, N - 1);
+	int number_of_close_next_rides = min(no_close_next_rides, rides.size() - 1);
 	for (int i = 0; i < number_of_close_next_rides ; i++){
 		given_ride->close_next_rides.push_back(find_close_ride(given_ride));
 	}

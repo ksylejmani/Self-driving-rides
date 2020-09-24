@@ -87,7 +87,6 @@ void tweak_solution::ht_get_random_rides(){
 	if(fleets.at(random_vehicle).size() >= 4)
 	{
 		random_ride_fleets_index = (rand() % (fleets.at(random_vehicle).size() - 2)) + 1;
-		cerr <<"random_ride_fleets_index: " << random_ride_fleets_index <<endl;
 	} 
 	else
 	{
