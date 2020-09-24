@@ -15,7 +15,7 @@ using namespace std;
 void stochastic_hill_climbing(unordered_map<int, vector<int>>& fleets, vector<int>& unassigned_rides, data_set& d1){
 	tweak_solution stochastic(fleets, unassigned_rides, d1);
 	int score = get_score(d1, fleets);
-    for(int i = 1; i < 10000; i++){
+    for(int i = 1; i < no_iterations; i++){
 	    if(!stochastic.tweak()){
 	    	break;
 	    }
@@ -59,7 +59,7 @@ bool tweak_solution::tweak(){
 
 void tweak_solution::t_replace_subsequent_rides(){
 	ht_get_replacements();
-	if(random_ride_fleets_index < fleets.at( random_vehicle).size() - 2)
+	if(random_ride_fleets_index < fleets.at(random_vehicle).size() - 2)
 	{
 		ht_replace_ride();
 	}
@@ -78,15 +78,16 @@ void tweak_solution::t_replace_random_ride(){
 }
 
 void tweak_solution::ht_get_random_rides(){
-	random_vehicle = (rand() % fleets.size() - 1) + 1;
-	while(fleets.at(random_vehicle).size() == 1)
+	random_vehicle = rand() % fleets.size();
+	while(fleets.at(random_vehicle).size() < 3)
 	{
-		random_vehicle = (rand() % fleets.size() - 1) + 1;
+		random_vehicle = rand() % fleets.size();
 	}
-	
+
 	if(fleets.at(random_vehicle).size() >= 4)
 	{
 		random_ride_fleets_index = (rand() % (fleets.at(random_vehicle).size() - 2)) + 1;
+		cerr <<"random_ride_fleets_index: " << random_ride_fleets_index <<endl;
 	} 
 	else
 	{
@@ -109,8 +110,9 @@ void tweak_solution::ht_get_replacements(){
 }
 
 void tweak_solution::ht_replace_ride(){
+
 	ride_to_remove = fleets.at (random_vehicle).at (random_ride_fleets_index + 1);
-	attempted_replacement = random_new_ride;		
+	attempted_replacement = random_new_ride;	
 	fleets.at (random_vehicle).at (random_ride_fleets_index + 1) = attempted_replacement;
 }
 

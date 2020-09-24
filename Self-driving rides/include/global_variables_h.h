@@ -2,6 +2,7 @@
 #define GLOBAL_VARIABLES_H
 
 #include <string>
+#include <unordered_map>
 
 using namespace std;
 
@@ -17,5 +18,8 @@ extern const double score_satisfactory_coefficient;
 extern string 	 instance_name;
 extern string	 instance_path;
 extern string	 solution_path;
+
+extern unordered_map<int, int> map_virtual_rides_to_file_rides;
+
 
 #endif
