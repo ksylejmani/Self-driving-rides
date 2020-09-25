@@ -33,7 +33,7 @@ void data_set::process_first_line(string first_line) {
 
 void data_set::process_ride_lines(string ride_line, int ride_index) {
 	vector<int> values = split_string_to_ints(ride_line);
-	if(values[0] + values[1] + abs(values[2] - values[0]) + abs(values[3] - values[1]) <= T){	
+	if(values[0] + values[1] + abs(values[2] - values[0]) + abs(values[3] - values[1]) <= values[5]){	
 		ride* new_ride = new ride(values[0], values[1], values[2], values[3], values[4], values[5]);
 		map_virtual_rides_to_file_rides[rides.size()] = ride_index;
 		rides.push_back(new_ride);
@@ -84,7 +84,7 @@ ride* data_set::find_close_ride(ride* given_ride) {
 }
 void data_set::find_k_closest_rides(ride* given_ride) {
 	//min(K, N - 1) in case K is bigger than the number of rides
-	int number_of_close_next_rides = min(no_close_next_rides, rides.size() - 1);
+	int number_of_close_next_rides = min(no_close_next_rides, (int) rides.size() - 1);
 	for (int i = 0; i < number_of_close_next_rides ; i++){
 		given_ride->close_next_rides.push_back(find_close_ride(given_ride));
 	}
