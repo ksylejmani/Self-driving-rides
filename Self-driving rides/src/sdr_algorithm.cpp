@@ -10,11 +10,16 @@
 
 using namespace std;
 
-int main() {
-	//Test run
+int main(int argc, char* argv[]) {
+	
+	instance_name = argv[1];
+	instance_path = "dataset/" + instance_name + ".in";
+	solution_path = "solution/" + instance_name + ".out";
 	
 	srand(time(NULL));
 	data_set d1(instance_path);
+
+	cout<<"Rides size: "<<d1.rides.size() <<" vs " <<d1.N << endl;
 
 	cout<<"Self driving rides solution for instance: " << instance_name << endl;
 

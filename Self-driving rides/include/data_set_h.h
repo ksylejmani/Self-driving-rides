@@ -2,8 +2,10 @@
 #define DATA_SET_H
 
 #include <vector>
+#include <unordered_map>
 
 #include "global_variables_h.h"
+
 struct ride;
 
 using namespace std;
@@ -18,7 +20,7 @@ struct data_set {
 
 	void 			read_instance_file();
 	void 			process_first_line(string);
-	void 			process_ride_lines(string);
+	void 			process_ride_lines(string, int);
 
 	//Could be private
 	ride* 			find_close_ride(ride*);

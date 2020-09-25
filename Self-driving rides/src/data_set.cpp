@@ -31,11 +31,13 @@ void data_set::process_first_line(string first_line) {
 	rides.reserve(N);
 }
 
-void data_set::process_ride_lines(string ride_line) {
+void data_set::process_ride_lines(string ride_line, int ride_index) {
 	vector<int> values = split_string_to_ints(ride_line);
-	ride* new_ride = new ride(values[0], values[1], values[2], values[3], values[4], values[5]);
-
-	rides.push_back(new_ride);
+	if(values[0] + values[1] + abs(values[2] - values[0]) + abs(values[3] - values[1]) <= values[5]){	
+		ride* new_ride = new ride(values[0], values[1], values[2], values[3], values[4], values[5]);
+		map_virtual_rides_to_file_rides[rides.size()] = ride_index;
+		rides.push_back(new_ride);
+	}
 }
 
 void data_set::read_instance_file() {
@@ -47,8 +49,10 @@ void data_set::read_instance_file() {
 		process_first_line(first_line);
 		//read the rest of instance lines
 		string ride_line;
+		int ride_index = 0;
 		while (getline(wf, ride_line)) {
-			process_ride_lines(ride_line);
+			process_ride_lines(ride_line, ride_index);
+			ride_index++;
 		}
 		wf.close();
 	}
@@ -80,7 +84,7 @@ ride* data_set::find_close_ride(ride* given_ride) {
 }
 void data_set::find_k_closest_rides(ride* given_ride) {
 	//min(K, N - 1) in case K is bigger than the number of rides
-	int number_of_close_next_rides = min(no_close_next_rides, N - 1);
+	int number_of_close_next_rides = min(no_close_next_rides, (int) rides.size() - 1);
 	for (int i = 0; i < number_of_close_next_rides ; i++){
 		given_ride->close_next_rides.push_back(find_close_ride(given_ride));
 	}

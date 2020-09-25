@@ -20,7 +20,7 @@ void submission::output_solution() {
 		j++;
 
 		for (;j < itr->second.size(); j++)
-			csv_file << " " << itr->second.at(j);
+			csv_file << " " << map_virtual_rides_to_file_rides.at(itr->second.at(j));
 		csv_file << endl;
 	}
 	csv_file.close();
