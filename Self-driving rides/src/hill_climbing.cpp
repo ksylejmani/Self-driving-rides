@@ -22,7 +22,7 @@ void stochastic_hill_climbing(unordered_map<int, vector<int>>& fleets, vector<in
 		int current_score = get_score(d1, fleets);
 		if(current_score > score){
 			stochastic.keep_tweak();
-			score = current_score; //for next iteration
+			score = current_score;
 		}
 		else
 		{

@@ -70,17 +70,24 @@ ride* data_set::find_close_ride(ride* given_ride) {
 			continue;
 
 		//Find the closest ride based on the distance between points
-		int check_distance = abs(given_ride->x - check_ride->a) + abs(given_ride->y - check_ride->b);
+		int check_distance = get_closest_distance(given_ride, check_ride);
 
 		if (closest_distance >= check_distance) {
 			if ( find (given_ride->close_next_rides.begin(), given_ride->close_next_rides.end(), check_ride) == given_ride->close_next_rides.end()) {
 				closest_ride = check_ride;
 				closest_distance = check_distance;
-				// closest_distance = get_closest_distance(closest_distance, check_distance);
+				// closest_distance = some_func(closest_distance, check_distance);
 			}
 		}
 	}
 	return closest_ride;
+}
+int data_set::get_closest_distance(ride* given_ride, ride* check_ride){
+	int given_ride_intersections_distance = abs(given_ride->a - given_ride->x) + abs(given_ride->b - given_ride->y); 
+	int time = given_ride->s + given_ride_intersections_distance;
+	time += abs(given_ride->x - check_ride->a) + abs(given_ride->y - check_ride->b);
+	return abs(check_ride->s - time);
+
 }
 void data_set::find_k_closest_rides(ride* given_ride) {
 	//min(K, N - 1) in case K is bigger than the number of rides

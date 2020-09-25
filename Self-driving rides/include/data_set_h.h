@@ -27,7 +27,7 @@ struct data_set {
 
 	void 			find_k_closest_rides(ride*);
 
-	void 			get_closest_distance(int, int); //not yet implemented
+	int 			get_closest_distance(ride*, ride*); //not yet implemented
 	void 			get_instance_details(vector<int>&);
 };
 
