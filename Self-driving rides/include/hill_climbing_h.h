@@ -27,6 +27,7 @@ struct tweak_solution
     int ride_to_remove;					//what has been removed
     int attempted_replacement;			// to improve with (copy of random_new_ride)
 
+    int score_before_tweak;
     bool successful_tweak;
     char attempted_tweak;
 

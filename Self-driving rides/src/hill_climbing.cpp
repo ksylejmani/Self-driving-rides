@@ -10,19 +10,22 @@
 #include "../include/hill_climbing_h.h"
 #include "../include/ride_h.h"
 #include "../include/some_functions_h.h"
+
 using namespace std;
 
 void stochastic_hill_climbing(unordered_map<int, vector<int>>& fleets, vector<int>& unassigned_rides, data_set& d1){
 	tweak_solution stochastic(fleets, unassigned_rides, d1);
-	int score = get_score(d1, fleets);
     for(int i = 1; i < no_iterations; i++){
+
 	    if(!stochastic.tweak()){
 	    	break;
 	    }
-		int current_score = get_score(d1, fleets);
-		if(current_score > score){
+
+		int current_score = get_score_for_one_vehicle(d1, fleets, stochastic.random_vehicle);
+
+		if(current_score > stochastic.score_before_tweak)
+		{
 			stochastic.keep_tweak();
-			score = current_score; //for next iteration
 		}
 		else
 		{
@@ -57,23 +60,12 @@ bool tweak_solution::tweak(){
 	}
 }
 
-void tweak_solution::t_replace_subsequent_rides(){
-	ht_get_replacements();
-	if(random_ride_fleets_index < fleets.at(random_vehicle).size() - 2)
-	{
-		ht_replace_ride();
-	}
-	else
-	{
-		ht_append_new_ride();
-	}
-	attempted_tweak = 'S';
-}
-
 void tweak_solution::t_replace_random_ride(){
 	ht_get_random_rides();
 	ht_get_replacements();
+	score_before_tweak = get_score_for_one_vehicle(d1, fleets, random_vehicle);
 	ht_replace_ride();
+	
 	attempted_tweak = 'R';
 }
 
@@ -94,7 +86,6 @@ void tweak_solution::ht_get_random_rides(){
 	}
 }
 
-
 void tweak_solution::ht_get_replacements(){
 	random_ride = fleets.at(random_vehicle).at( random_ride_fleets_index );
 	ride* ride_to_check = get_ride (random_ride).close_next_rides.at (rand() % no_close_next_rides);
@@ -108,8 +99,22 @@ void tweak_solution::ht_get_replacements(){
 	}
 }
 
-void tweak_solution::ht_replace_ride(){
+void tweak_solution::t_replace_subsequent_rides(){
+	ht_get_replacements();
+	score_before_tweak = get_score_for_one_vehicle(d1, fleets, random_vehicle);
+	if(random_ride_fleets_index < fleets.at(random_vehicle).size() - 2)
+	{
+		ht_replace_ride();
+	}
+	else
+	{
+		ht_append_new_ride();
+		
+	}
+	attempted_tweak = 'S';
+}
 
+void tweak_solution::ht_replace_ride(){
 	ride_to_remove = fleets.at (random_vehicle).at (random_ride_fleets_index + 1);
 	attempted_replacement = random_new_ride;	
 	fleets.at (random_vehicle).at (random_ride_fleets_index + 1) = attempted_replacement;
@@ -124,12 +129,8 @@ void tweak_solution::ht_append_new_ride(){
 //IF TWEAK DIDN'T YIELD A BETTER SOLUTION
 void tweak_solution::undo_tweak(){
 	switch(attempted_tweak){
-		case 'R':
-		u_revert_replacement();
-		break;
-		case 'S':
-		u_revert_subsequent();
-		break;
+		case 'R':	u_revert_replacement();		break;
+		case 'S':	u_revert_subsequent();		break;
 	}
 }
 
@@ -152,17 +153,12 @@ void tweak_solution::u_revert_subsequent(){
 void tweak_solution::hu_revert_append(){
 	fleets.at(random_vehicle).pop_back();
 	successful_tweak = false;
-
 }
 //IF TWEAK YIELDED A BETTER SOLTUION
 void tweak_solution::keep_tweak(){
 	switch(attempted_tweak){
-		case 'R':
-		k_replace_random();
-		break;
-		case 'S':
-		k_subsequent();
-		break;
+		case 'R':	k_replace_random();		break;
+		case 'S':	k_subsequent();			break;
 	}
 }
 
@@ -210,7 +206,6 @@ int tweak_solution::get_ride_index(ride* ride){
 ride& tweak_solution::get_ride(int ride_index){
 	return *(d1.rides.at(ride_index));
 }
-
 void tweak_solution::fix_number_of_rides_per_vehicle(){
 	for(auto vehicle =  fleets.begin(); vehicle != fleets.end(); vehicle++){
 		vehicle->second[0] =  vehicle->second.size() -1;
