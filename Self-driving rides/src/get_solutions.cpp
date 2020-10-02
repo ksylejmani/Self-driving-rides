@@ -10,18 +10,20 @@
 
 using namespace std;
 
-vector<int> unassigned_rides_variant_1;	//Unimportant size
+vector<int> unassigned_rides_variant_1; //Unimportant size
 
-unordered_map<int, vector<int>> get_initial_solution_variant_1(const data_set& ds) {
+unordered_map<int, vector<int>> get_initial_solution_variant_1(const data_set &ds)
+{
 	// Variant 1 - Fully random, to be done by Enes
 	unordered_map<int, vector<int>> result;
-	vector<vector<int> > vehicles(ds.F);
+	vector<vector<int>> vehicles(ds.F);
 	srand(time(NULL));
 	list<int> assigned_rides;
 	//counters count the number of rides we assign to a car
-	vector <int> Counters(ds.F, 0);
+	vector<int> Counters(ds.F, 0);
 
-	for (int i = 0; i < ds.rides.size(); i++){
+	for (int i = 0; i < ds.rides.size(); i++)
+	{
 		unassigned_rides_variant_1.push_back(i);
 	}
 	random_shuffle(unassigned_rides_variant_1.begin(), unassigned_rides_variant_1.end());
@@ -29,16 +31,18 @@ unordered_map<int, vector<int>> get_initial_solution_variant_1(const data_set& d
 	{
 		int time_left = ds.T;
 		//list of the rides that are unaffordable for the car i
-		vector <int> unaffordable_rides;
+		vector<int> unaffordable_rides;
 		//while there is some time left, do ...
 		while (time_left > initial_solution_time_left_margin * ds.T)
 		{
 			int random_ride = unassigned_rides_variant_1.back();
 			unassigned_rides_variant_1.pop_back();
 			//if time passed is greater than or equal to latest finish this ride is unaffordable for this car
-			if (ds.T - time_left >= ds.rides.at(random_ride)->f) {
+			if (ds.T - time_left >= ds.rides.at(random_ride)->f)
+			{
 				unaffordable_rides.push_back(random_ride);
-				if ((unaffordable_rides.size() == ds.rides.size() - assigned_rides.size()) || (unaffordable_rides.size() == ds.rides.size())) {
+				if ((unaffordable_rides.size() == ds.rides.size() - assigned_rides.size()) || (unaffordable_rides.size() == ds.rides.size()))
+				{
 					unassigned_rides_variant_1.insert(unassigned_rides_variant_1.end(), unaffordable_rides.begin(), unaffordable_rides.end());
 					break;
 				}
@@ -48,7 +52,8 @@ unordered_map<int, vector<int>> get_initial_solution_variant_1(const data_set& d
 			int earliest_time = ds.rides.at(random_ride)->s;
 
 			//if this is the first ride for vehicle i
-			if (time_left == ds.T) {
+			if (time_left == ds.T)
+			{
 				if (ds.rides.at(random_ride)->s < (ds.rides.at(random_ride)->a + ds.rides.at(random_ride)->b))
 					earliest_time = ds.rides.at(random_ride)->a + ds.rides.at(random_ride)->b;
 			}
@@ -70,8 +75,9 @@ unordered_map<int, vector<int>> get_initial_solution_variant_1(const data_set& d
 				time_left = ds.T - (earliest_time + distance_between_intersections);
 				Counters.at(i)++;
 				//if all rides are assigned or if we have checked all rides for the car i there is nothing left to check so go to the next car (break)
-				if ((assigned_rides.size() == ds.rides.size()) || (unaffordable_rides.size() + assigned_rides.size() == ds.rides.size()) || time_left <= initial_solution_time_left_margin*ds.T ) {
-					unassigned_rides_variant_1.insert(unassigned_rides_variant_1.end(),unaffordable_rides.begin(), unaffordable_rides.end());
+				if ((assigned_rides.size() == ds.rides.size()) || (unaffordable_rides.size() + assigned_rides.size() == ds.rides.size()) || time_left <= initial_solution_time_left_margin * ds.T)
+				{
+					unassigned_rides_variant_1.insert(unassigned_rides_variant_1.end(), unaffordable_rides.begin(), unaffordable_rides.end());
 					break;
 				}
 			}
@@ -80,23 +86,25 @@ unordered_map<int, vector<int>> get_initial_solution_variant_1(const data_set& d
 			{
 				unaffordable_rides.push_back(random_ride);
 				//if all rides are unaffordable (pretty sure that this condition never gets true , put it for the sake of safeness) , or we have checked all rides , break .
-				if ((unaffordable_rides.size() == ds.rides.size() - assigned_rides.size()) || (unaffordable_rides.size() == ds.rides.size())) {
-					unassigned_rides_variant_1.insert(unassigned_rides_variant_1.end(),unaffordable_rides.begin(), unaffordable_rides.end());
+				if ((unaffordable_rides.size() == ds.rides.size() - assigned_rides.size()) || (unaffordable_rides.size() == ds.rides.size()))
+				{
+					unassigned_rides_variant_1.insert(unassigned_rides_variant_1.end(), unaffordable_rides.begin(), unaffordable_rides.end());
 					break;
 				}
 			}
 			//Test your solution in the main function
-
 		}
 		vehicles[i].insert(vehicles[i].begin(), Counters.at(i));
 		result.insert(pair<int, vector<int>>(i, vehicles[i]));
 		//if all rides are assigned for the cars up to i , do
-		if (assigned_rides.size() == ds.rides.size()) {
+		if (assigned_rides.size() == ds.rides.size())
+		{
 			//if this isn't the last car left
 			if (i != ds.F - 1)
 			{
 				//assign the rest of the cars 0 rides
-				for (int j = i + 1; j < ds.F; j++) {
+				for (int j = i + 1; j < ds.F; j++)
+				{
 					vehicles[j].push_back(0);
 					result.insert(pair<int, vector<int>>(j, vehicles[j]));
 				}
@@ -107,13 +115,30 @@ unordered_map<int, vector<int>> get_initial_solution_variant_1(const data_set& d
 	return result;
 }
 
-// unordered_map<int, vector<int>> get_initial_solution_variant_2(const data_set& ds) {
-// 	// Variant 2 - Smart random, to be done by Lendrit
-// 	unordered_map<int, vector<int>> result;
-// 	//Implementation goes here ...
-// 	//Test your solution in the main function
-// 	return result;
-// }
+unordered_map<int, vector<int>> get_initial_smart_solution(const data_set &ds)
+{
+	unordered_map<int, vector<int>> result;
+
+	int fleets = ds.F;
+
+	unordered_map<int, vector<int>> assigned_rides;
+
+	for (int i = 0; i < fleets; i++)
+	{
+		int time = ds.T;
+		while (time > 0)
+		{
+		
+		
+		
+		
+		
+		
+		
+		}
+	}
+	return result;
+}
 
 // unordered_map<int, vector<int>> get_greedy_local_search_solution(const data_set& ds) {
 // 	unordered_map<int, vector<int>> d;
@@ -131,4 +156,3 @@ unordered_map<int, vector<int>> get_initial_solution_variant_1(const data_set& d
 // 	//}
 // 	return d;
 // }
-
